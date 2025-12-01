@@ -8,16 +8,13 @@ class DrawableObject {
     height = 250;
     
 
-
-
-
     loadImage(path){
         this.img = new Image();
         this.img.src = path;
     }
 
 
-    draw(ctx){
+    drawSingleObject(ctx){
         ctx.drawImage(
             this.img,
             this.x,

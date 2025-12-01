@@ -13,9 +13,9 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.draw();
+        this.drawCanvas();
         this.setWorld();
-        this.run();
+        this.runGameLogic();
     }
 
 
@@ -24,9 +24,8 @@ class World {
     }
 
 
-    run(){
+    runGameLogic(){
         setInterval(() => {
-            
             this.checkCollisions();
             this.checkThrowObjects();
         }, 200);
@@ -51,7 +50,7 @@ class World {
     }
 
 
-    draw(){
+    drawCanvas(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.ctx.translate(this.camera_x, 0);
@@ -76,7 +75,7 @@ class World {
 
         let self = this;
         requestAnimationFrame(function(){
-            self.draw();
+            self.drawCanvas();
         });
     }
 
@@ -93,7 +92,7 @@ class World {
             this.flipImage(movableObject);
         }
 
-        movableObject.draw(this.ctx);
+        movableObject.drawSingleObject(this.ctx);
         movableObject.drawFrame(this.ctx);
         
 
