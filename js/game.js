@@ -32,6 +32,9 @@ window.addEventListener("keydown", (event) => {
     }
 
     if(event.key === "d"){
+        if (world.character.isDead()){
+            return
+        }
         keyboard.D = true;
     }
 });

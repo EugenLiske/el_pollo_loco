@@ -5,6 +5,8 @@ class MovableObject extends DrawableObject {
     acceleration = 1;
     energy = 100;
     lastHit = 0;
+    currentAnimation = null;
+    collectedCoins = 0;
 
 
     applyGravity(){
@@ -34,10 +36,16 @@ class MovableObject extends DrawableObject {
     }
 
 
-    hit(){
+    hit() {
+        if (this.isDead()) {
+            return;
+        }
+
         this.energy -= 5;
-        if(this.energy < 0){
-            this.energy = 0;
+
+        if (this.energy <= 0) {
+            this.energy = 0;              
+            this.currentImageIndex = 0; 
         } else {
             this.lastHit = new Date().getTime();
         }
@@ -55,12 +63,36 @@ class MovableObject extends DrawableObject {
         return this.energy === 0;
     }
 
-    
-    playAnimation(images){
-        let imageIndex = this.currentImageIndex % images.length;
-        let path = images[imageIndex];
+    collectCoin(){
+        this.collectedCoins ++;
+    }
+
+
+    setAnimation(animationKey, images, loop = true) {
+        if (this.currentAnimation !== animationKey) {
+            this.currentAnimation = animationKey;
+            this.currentImageIndex = 0;
+        }
+
+        this.playAnimation(images, loop);
+    }
+
+
+    playAnimation(images, loop = true) {
+        let index = this.currentImageIndex;
+
+        if (loop) {
+            index = index % images.length;
+            this.currentImageIndex++;
+
+        } else {
+            if (this.currentImageIndex < images.length - 1) {
+                this.currentImageIndex++;
+            }
+        }
+
+        const path = images[index];
         this.img = this.imageCache[path];
-        this.currentImageIndex++;
     }
 
 
@@ -75,6 +107,6 @@ class MovableObject extends DrawableObject {
 
     
     jump(){
-        this.speedY = 20;
+        this.speedY = 23;
     }
 }
