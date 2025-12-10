@@ -52,9 +52,6 @@ class World {
                 let percent = (this.character.collectedCoins / maxCoins) * 100;
                 this.statusBarCoins.setCollectedCoinsPercentage(percent);
 
-                console.log(this.statusBarCoins.collectedCoinsPercentage);
-                console.log(this.character.collectedCoins);
-
                 this.level.coins.splice(i, 1);
             }   
         }
@@ -75,6 +72,12 @@ class World {
 
         this.addObjectsToMap(this.level.backgroundObjects);
 
+        this.addToMap(this.character);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.clouds);
+        this.addObjectsToMap(this.throwableObjects);
+        this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottles);
 
         this.ctx.translate(-this.camera_x, 0);
         //--------- space for fixed objects ---------
@@ -82,14 +85,6 @@ class World {
         this.addToMap(this.statusBarCoins);
         //--------- space for fixed objects ---------
         this.ctx.translate(this.camera_x, 0);
-
-
-        this.addToMap(this.character);
-        this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.level.clouds);
-        this.addObjectsToMap(this.throwableObjects);
-        this.addObjectsToMap(this.level.coins);
-        
 
         this.ctx.translate(-this.camera_x, 0);
 
