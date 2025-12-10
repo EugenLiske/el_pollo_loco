@@ -7,6 +7,14 @@ class MovableObject extends DrawableObject {
     lastHit = 0;
     currentAnimation = null;
     collectedCoins = 0;
+    collectedBottles = 0;
+
+    offset = {
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
+    };
 
 
     applyGravity(){
@@ -33,6 +41,13 @@ class MovableObject extends DrawableObject {
                this.y + this.height > movableObject.y &&
                this.x < movableObject.x + movableObject.width &&
                this.y < movableObject.y + movableObject.height;
+    }
+
+    isCollidingWithOffset(movableObject){
+        return this.x + this.width - this.offset.right > movableObject.x + movableObject.offset.left &&
+               this.y + this.height - this.offset.bottom > movableObject.y + movableObject.offset.top &&
+               this.x + this.offset.left < movableObject.x + movableObject.width - movableObject.offset.right &&
+               this.y + this.offset.top < movableObject.y + movableObject.height - movableObject.offset.bottom;
     }
 
 
@@ -64,7 +79,11 @@ class MovableObject extends DrawableObject {
     }
 
     collectCoin(){
-        this.collectedCoins ++;
+        this.collectedCoins++;
+    }
+
+    collectBottle(){
+        this.collectedBottles++;
     }
 
 

@@ -6,7 +6,8 @@ class World {
     keyboard;
     camera_x = 0;
     statusBar = new StatusBar(30, 0, 'health');
-    statusBarCoins = new StatusBar(240, 0, 'coins');
+    statusBarCoins = new StatusBar(190, 0, 'coins');
+    statusBarBottles = new StatusBar(350, 0, 'bottles');
     throwableObjects = [];
 
 
@@ -56,6 +57,20 @@ class World {
             }   
         }
 
+        const maxBottles = 20;
+        for (let i = this.level.bottles.length - 1; i >= 0; i--) {
+            const bottle = this.level.bottles[i];
+
+            if (this.character.isColliding(bottle)) {
+                this.character.collectBottle();
+
+                let percent = (this.character.collectedBottles / maxBottles) * 100;
+                this.statusBarBottles.setCollectedBottlesPercentage(percent);
+
+                this.level.bottles.splice(i, 1);
+            }   
+        }
+
         this.level.enemies.forEach((enemy) => {
             if(this.character.isColliding(enemy)){
                 this.character.hit();
@@ -83,6 +98,7 @@ class World {
         //--------- space for fixed objects ---------
         this.addToMap(this.statusBar);
         this.addToMap(this.statusBarCoins);
+        this.addToMap(this.statusBarBottles);
         //--------- space for fixed objects ---------
         this.ctx.translate(this.camera_x, 0);
 

@@ -6,8 +6,8 @@ class SalsaBottle extends MovableObject {
 
     static existingBottles = [];
 
-    height = 75;
-    width = 75;
+    height = 60;
+    width = 60;
 
     constructor(){
         super();
@@ -20,14 +20,14 @@ class SalsaBottle extends MovableObject {
         SalsaBottle.existingBottles.push(this);
     }
 
-    placeWithoutOverlap() {
+    placeWithoutOverlap(){
         const maxTries = 100;
         let tries = 0;
         let positionOk = false;
 
         while (!positionOk && tries < maxTries) {
             this.x = 300 + Math.random() * 4700;
-            this.y = 345 + Math.random() * 10;
+            this.y = 360 + Math.random() * 10;
 
             positionOk = true;
 
