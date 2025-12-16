@@ -26,9 +26,14 @@ class DrawableObject {
 
 
     drawFrame(ctx){
-        if(this instanceof Character || this instanceof Chicken || this instanceof Coin || this instanceof Endboss || this instanceof SalsaBottle){
+        if (this instanceof Character ||
+            this instanceof Chicken ||
+            this instanceof Coin ||
+            this instanceof Endboss ||
+            this instanceof SalsaBottle){
+
             ctx.beginPath();
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 1;
             ctx.strokeStyle = 'blue';
             ctx.rect(
                 this.x,
@@ -37,6 +42,32 @@ class DrawableObject {
                 this.height);
             ctx.stroke();
         } 
+    }
+
+
+    drawFrameWithOffset(ctx) {
+        if (this instanceof Character || 
+            this instanceof Chicken || 
+            this instanceof Coin || 
+            this instanceof Endboss || 
+            this instanceof SalsaBottle || 
+            this instanceof ThrowableObject) {
+
+            const hitboxX = this.x + this.offset.left;
+            const hitboxY = this.y + this.offset.top;
+            const hitboxWidth = this.width - this.offset.left - this.offset.right;
+            const hitboxHeight = this.height - this.offset.top - this.offset.bottom;
+
+            ctx.beginPath();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'red';
+            ctx.rect(
+                hitboxX,
+                hitboxY,
+                hitboxWidth,
+                hitboxHeight);
+            ctx.stroke();
+        }
     }
 
 

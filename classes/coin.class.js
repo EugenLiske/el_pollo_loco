@@ -14,6 +14,13 @@ class Coin extends MovableObject {
         this.loadImage('img/8_coin/coin_1.png');
         this.loadImages(this.IMAGES_COIN);
 
+        this.offset = {
+            top: 45,
+            left: 45,
+            right: 45,
+            bottom: 45
+        };
+
         this.placeWithoutOverlap();
         Coin.existingCoins.push(this);
 
@@ -32,7 +39,7 @@ class Coin extends MovableObject {
             positionOk = true;
 
             Coin.existingCoins.forEach(existingCoin => {
-                if (this.isColliding(existingCoin)) {
+                if (this.isCollidingWithOffset(existingCoin)) {
                     positionOk = false;
                 }
             });

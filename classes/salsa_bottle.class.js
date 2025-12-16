@@ -16,6 +16,13 @@ class SalsaBottle extends MovableObject {
 
         this.loadImage(randomPath);
 
+        this.offset = {
+            top: 8,
+            left: 13,
+            right: 13,
+            bottom: 5
+        };
+
         this.placeWithoutOverlap();
         SalsaBottle.existingBottles.push(this);
     }
@@ -32,7 +39,7 @@ class SalsaBottle extends MovableObject {
             positionOk = true;
 
             SalsaBottle.existingBottles.forEach(existingBottle => {
-                if (this.isColliding(existingBottle)) {
+                if (this.isCollidingWithOffset(existingBottle)) {
                     positionOk = false;
                 }
             });

@@ -30,7 +30,7 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-        }, 200);
+        }, 1000 / 25);
     }
 
 
@@ -47,7 +47,7 @@ class World {
         for (let i = this.level.coins.length - 1; i >= 0; i--) {
             const coin = this.level.coins[i];
 
-            if (this.character.isColliding(coin)) {
+            if (this.character.isCollidingWithOffset(coin)) {
                 this.character.collectCoin();
 
                 let percent = (this.character.collectedCoins / maxCoins) * 100;
@@ -61,7 +61,7 @@ class World {
         for (let i = this.level.bottles.length - 1; i >= 0; i--) {
             const bottle = this.level.bottles[i];
 
-            if (this.character.isColliding(bottle)) {
+            if (this.character.isCollidingWithOffset(bottle)) {
                 this.character.collectBottle();
 
                 let percent = (this.character.collectedBottles / maxBottles) * 100;
@@ -71,12 +71,43 @@ class World {
             }   
         }
 
-        this.level.enemies.forEach((enemy) => {
-            if(this.character.isColliding(enemy)){
-                this.character.hit();
-                this.statusBar.setPercentage(this.character.energy);
+        for (let i = this.level.enemies.length - 1; i >= 0; i--) {
+            const enemy = this.level.enemies[i];
+
+            if (enemy instanceof Chicken && enemy.isDeadChicken) {
+                continue;
             }
-        });
+
+            if (this.character.isCollidingWithOffset(enemy)) {
+
+                if (enemy instanceof Chicken && this.isCharacterStompingEnemy(enemy)) {
+                    enemy.die();
+
+                    this.character.speedY = 15;
+
+                    setTimeout(() => {
+                        const index = this.level.enemies.indexOf(enemy);
+                        if (index > -1) {
+                            this.level.enemies.splice(index, 1);
+                        }
+                    }, 500);
+
+                } else {
+                    this.character.hit();
+                    this.statusBar.setPercentage(this.character.energy);
+                }
+            }
+        }
+    }
+
+
+    isCharacterStompingEnemy(enemy) {
+        const charBottom = this.character.y + this.character.height - this.character.offset.bottom;
+        const enemyTop   = enemy.y + enemy.offset.top;
+
+        const isFalling = this.character.speedY < 0 && this.character.isAboveGround();
+
+        return isFalling && charBottom > enemyTop;
     }
 
 
@@ -125,6 +156,7 @@ class World {
 
         movableObject.drawSingleObject(this.ctx);
         movableObject.drawFrame(this.ctx);
+        movableObject.drawFrameWithOffset(this.ctx);
         
 
         if(movableObject.otherDirection){
