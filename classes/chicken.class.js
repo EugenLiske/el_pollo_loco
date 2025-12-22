@@ -19,7 +19,7 @@ class Chicken extends MovableObject {
     
     constructor(){
         super();
-        
+
         this.loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
@@ -31,10 +31,35 @@ class Chicken extends MovableObject {
             bottom: 10
         };
 
-        this.x = 1000 + Math.random() * 4000;
+        this.placeWithMinDistanceX();
+        Chicken.existingEnemies.push(this);
+
         this.speed = 0.15 + Math.random() * 0.5;
 
         this.animate();
+    }
+
+
+    placeWithMinDistanceX() {
+        const maxTries = 100;
+        const MIN_DISTANCE_X = 250;
+
+        let tries = 0;
+        let positionOk = false;
+
+        while (!positionOk && tries < maxTries) {
+            this.x = 1000 + Math.random() * 4000;
+
+            positionOk = true;
+
+            Chicken.existingEnemies.forEach(existingEnemy => {
+                if (Math.abs(this.x - existingEnemy.x) < MIN_DISTANCE_X) {
+                    positionOk = false;
+                }
+            });
+
+            tries++;
+        }
     }
 
 
