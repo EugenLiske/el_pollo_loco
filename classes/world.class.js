@@ -31,7 +31,6 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-            this.checkBottleWithBottomCollision();
         }, 1000 / 25);
     }
 
@@ -59,6 +58,8 @@ class World {
         this.checkCoinCollection();
         this.checkBottleCollection();
         this.checkRegularEnemyCollision();
+        this.checkBottleWithBottomCollision();
+        this.checkBottleWithRegularEnemyCollision();
     }
 
 
@@ -136,41 +137,89 @@ class World {
     }
 
     
-    checkBottleWithBottomCollision() {
-    const GROUND_Y = 450;
+    checkBottleWithBottomCollision(){
+        const GROUND_Y = 450;
 
-    for (let i = this.throwableObjects.length - 1; i >= 0; i--) {
-        const bottle = this.throwableObjects[i];
+        for (let i = this.throwableObjects.length - 1; i >= 0; i--) {
+            const bottle = this.throwableObjects[i];
+            const bottleBottom = bottle.y + bottle.height - bottle.offset.bottom;
 
-        // Unterkante der Flasche (mit Offset)
-        const bottleBottom = bottle.y + bottle.height - bottle.offset.bottom;
+            if (!bottle.isBroken && bottleBottom >= GROUND_Y) {
+                bottle.y = GROUND_Y - (bottle.height - bottle.offset.bottom);
+                bottle.isBroken = true;
+                bottle.speedY = 0;
+                bottle.acceleration = 0;
+                bottle.setAnimation('splash', bottle.IMAGES_BOTTLE_SPLASH, false);
 
-        // Flasche hat den Boden erreicht oder unterschritten
-        if (!bottle.isBroken && bottleBottom >= GROUND_Y) {
+                setTimeout(() => {
+                    const index = this.throwableObjects.indexOf(bottle);
+                    if (index > -1) {
+                        this.throwableObjects.splice(index, 1);
+                    }
+                }, 500);
+            }
+        }
+    }
 
-            // Flasche genau auf dem Boden „absetzen“ (kein Durchfallen)
-            bottle.y = GROUND_Y - (bottle.height - bottle.offset.bottom);
 
-            // Zustand merken: Flasche ist zerbrochen
-            bottle.isBroken = true;
+    checkBottleWithRegularEnemyCollision() {
+    // Wir gehen rückwärts, weil wir evtl. per splice entfernen
+    for (let b = this.throwableObjects.length - 1; b >= 0; b--) {
+        const bottle = this.throwableObjects[b];
 
-            // Vertikale Bewegung stoppen (Gravity hat keinen Effekt mehr)
-            bottle.speedY = 0;
-            bottle.acceleration = 0;
+        // Zerbrochene Flaschen ignorieren (die sind schon im Splash-Modus)
+        if (bottle.isBroken) {
+            continue;
+        }
 
-            // Splash-Animation einmalig abspielen
-            bottle.setAnimation('splash', bottle.IMAGES_BOTTLE_SPLASH, false);
+        // Für jede fliegende Flasche prüfen wir gegen alle Gegner
+        for (let e = this.level.enemies.length - 1; e >= 0; e--) {
+            const enemy = this.level.enemies[e];
 
-            // OPTIONAL: nach kurzer Zeit die Scherben entfernen
-            setTimeout(() => {
-                const index = this.throwableObjects.indexOf(bottle);
-                if (index > -1) {
-                    this.throwableObjects.splice(index, 1);
+            // Tote Chickens sollen nicht nochmal reagieren
+            if (enemy instanceof Chicken && enemy.isDeadChicken) {
+                continue;
+            }
+
+            // Flasche trifft Enemy?
+            if (bottle.isCollidingWithOffset(enemy)) {
+
+                // 1) Flasche zerplatzt sofort (wie Bodenkollision)
+                bottle.isBroken = true;
+                bottle.speedY = 0;
+                bottle.acceleration = 0;
+                bottle.setAnimation('splash', bottle.IMAGES_BOTTLE_SPLASH, false);
+
+                // Flasche nach 500ms entfernen (Scherben weg)
+                setTimeout(() => {
+                    const index = this.throwableObjects.indexOf(bottle);
+                    if (index > -1) {
+                        this.throwableObjects.splice(index, 1);
+                    }
+                }, 500);
+
+                // 2) Enemy stirbt sofort
+                if (enemy instanceof Chicken) {
+                    enemy.die();
+
+                    // Enemy nach 500ms entfernen
+                    setTimeout(() => {
+                        const index = this.level.enemies.indexOf(enemy);
+                        if (index > -1) {
+                            this.level.enemies.splice(index, 1);
+                        }
+                    }, 500);
                 }
-            }, 500);
+
+                // Wir haben einen Treffer verarbeitet:
+                // - diese Flasche soll nur EINEN Gegner treffen,
+                // - und wir wollen keine weiteren Checks mit dieser Flasche mehr machen.
+                break;
+            }
         }
     }
 }
+
 
 
 

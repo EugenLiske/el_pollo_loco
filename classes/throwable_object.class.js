@@ -24,8 +24,8 @@ class ThrowableObject extends MovableObject {
         this.loadImages(this.IMAGES_BOTTLE_SPLASH);
         this.x = x;
         this.y = y;
+        this.width = 60;
         this.height = 60;
-        this.width = 50;
 
         this.offset = {
             top: 5,

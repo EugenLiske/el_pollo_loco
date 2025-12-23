@@ -50,7 +50,7 @@ class MovableObject extends DrawableObject {
                this.y + this.offset.top < movableObject.y + movableObject.height - movableObject.offset.bottom;
     }
 
-
+    
     hit() {
         if (this.isDead()) {
             return;
