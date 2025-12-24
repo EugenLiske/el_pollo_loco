@@ -6,6 +6,13 @@ class ThrowableObject extends MovableObject {
         'img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png'
     ];
 
+    IMAGES_BOTTLE_ROTATION_LEFT = [
+        'img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png'
+    ];
+
     IMAGES_BOTTLE_SPLASH = [
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
@@ -16,16 +23,23 @@ class ThrowableObject extends MovableObject {
     ]
 
     isBroken = false;
+    rotationImages;
 
-    constructor(x, y){
+    constructor(x, y, otherDirection){
         super();
         this.loadImage('img/6_salsa_bottle/salsa_bottle.png');
         this.loadImages(this.IMAGES_BOTTLE_ROTATION);
+        this.loadImages(this.IMAGES_BOTTLE_ROTATION_LEFT);
         this.loadImages(this.IMAGES_BOTTLE_SPLASH);
+
         this.x = x;
         this.y = y;
         this.width = 60;
         this.height = 60;
+
+        this.otherDirection = otherDirection;
+
+        this.rotationImages = this.otherDirection ? this.IMAGES_BOTTLE_ROTATION_LEFT : this.IMAGES_BOTTLE_ROTATION;
 
         this.offset = {
             top: 5,
@@ -43,20 +57,23 @@ class ThrowableObject extends MovableObject {
         this.applyGravity();
         setInterval(() => {
             if(this.isBroken) {
-                return; // nach dem Zerplatzen nicht weiter nach rechts fliegen
+                return;
             }
-            this.x += 15;
+
+            if (this.otherDirection) {
+                this.x -= 15;
+            } else {
+                this.x += 15;
+            }
         }, 50);
     }
 
     animate(){
         setInterval(() => {
             if (this.isBroken) {
-                // Splash-Animation EINMALIG, dank loop = false und setAnimation
                 this.setAnimation('splash', this.IMAGES_BOTTLE_SPLASH, false);
             } else {
-                // Solange die Flasche fliegt, Rotation abspielen
-                this.playAnimation(this.IMAGES_BOTTLE_ROTATION);
+                this.playAnimation(this.rotationImages);
             }
         }, 100);
     }

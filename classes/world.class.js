@@ -45,7 +45,12 @@ class World {
             (now - this.lastThrowTime) >= COOLDOWN_MS;
 
         if (canThrow) {
-            const bottle = new ThrowableObject(this.character.x + 65, this.character.y + 110);
+            const directionLeft = this.character.otherDirection;
+
+            const spawnX = directionLeft ? this.character.x - 13 : this.character.x + 55;
+            const spawnY = this.character.y + 130;
+
+            const bottle = new ThrowableObject(spawnX, spawnY, directionLeft);
             this.throwableObjects.push(bottle);
 
             this.character.collectedBottles--;
@@ -163,62 +168,50 @@ class World {
 
 
     checkBottleWithRegularEnemyCollision() {
-    // Wir gehen rückwärts, weil wir evtl. per splice entfernen
-    for (let b = this.throwableObjects.length - 1; b >= 0; b--) {
-        const bottle = this.throwableObjects[b];
+        for (let i = this.throwableObjects.length - 1; i >= 0; i--) {
+            const bottle = this.throwableObjects[i];
 
-        // Zerbrochene Flaschen ignorieren (die sind schon im Splash-Modus)
-        if (bottle.isBroken) {
-            continue;
-        }
-
-        // Für jede fliegende Flasche prüfen wir gegen alle Gegner
-        for (let e = this.level.enemies.length - 1; e >= 0; e--) {
-            const enemy = this.level.enemies[e];
-
-            // Tote Chickens sollen nicht nochmal reagieren
-            if (enemy instanceof Chicken && enemy.isDeadChicken) {
+            if (bottle.isBroken) {
                 continue;
             }
 
-            // Flasche trifft Enemy?
-            if (bottle.isCollidingWithOffset(enemy)) {
+            for (let i = this.level.enemies.length - 1; i >= 0; i--) {
+                const enemy = this.level.enemies[i];
 
-                // 1) Flasche zerplatzt sofort (wie Bodenkollision)
-                bottle.isBroken = true;
-                bottle.speedY = 0;
-                bottle.acceleration = 0;
-                bottle.setAnimation('splash', bottle.IMAGES_BOTTLE_SPLASH, false);
-
-                // Flasche nach 500ms entfernen (Scherben weg)
-                setTimeout(() => {
-                    const index = this.throwableObjects.indexOf(bottle);
-                    if (index > -1) {
-                        this.throwableObjects.splice(index, 1);
-                    }
-                }, 500);
-
-                // 2) Enemy stirbt sofort
-                if (enemy instanceof Chicken) {
-                    enemy.die();
-
-                    // Enemy nach 500ms entfernen
-                    setTimeout(() => {
-                        const index = this.level.enemies.indexOf(enemy);
-                        if (index > -1) {
-                            this.level.enemies.splice(index, 1);
-                        }
-                    }, 500);
+                if (enemy instanceof Chicken && enemy.isDeadChicken) {
+                    continue;
                 }
 
-                // Wir haben einen Treffer verarbeitet:
-                // - diese Flasche soll nur EINEN Gegner treffen,
-                // - und wir wollen keine weiteren Checks mit dieser Flasche mehr machen.
-                break;
+                if (bottle.isCollidingWithOffset(enemy)) {
+
+                    bottle.isBroken = true;
+                    bottle.speedY = 0;
+                    bottle.acceleration = 0;
+                    bottle.setAnimation('splash', bottle.IMAGES_BOTTLE_SPLASH, false);
+
+                    setTimeout(() => {
+                        const index = this.throwableObjects.indexOf(bottle);
+                        if (index > -1) {
+                            this.throwableObjects.splice(index, 1);
+                        }
+                    }, 500);
+
+                    if (enemy instanceof Chicken) {
+                        enemy.die();
+
+                        setTimeout(() => {
+                        const index = this.level.enemies.indexOf(enemy);
+                            if (index > -1) {
+                                this.level.enemies.splice(index, 1);
+                            }
+                        }, 500);
+                    }
+
+                    break;
+                }
             }
         }
     }
-}
 
 
 
