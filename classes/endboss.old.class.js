@@ -2,14 +2,14 @@ class Endboss extends MovableObject {
     IMAGES_IDLE = [
         'img/4_enemie_boss_chicken/1_walk/G1.png'
     ];
-
+    
     IMAGES_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
         'img/4_enemie_boss_chicken/1_walk/G3.png',
         'img/4_enemie_boss_chicken/1_walk/G4.png'
-    ];
-
+    ]
+    
     IMAGES_ALERT = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
         'img/4_enemie_boss_chicken/2_alert/G6.png',
@@ -30,19 +30,19 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/3_attack/G18.png',
         'img/4_enemie_boss_chicken/3_attack/G19.png',
         'img/4_enemie_boss_chicken/3_attack/G20.png'
-    ];
+    ]
 
     IMAGES_HURT = [
         'img/4_enemie_boss_chicken/4_hurt/G21.png',
         'img/4_enemie_boss_chicken/4_hurt/G22.png',
         'img/4_enemie_boss_chicken/4_hurt/G23.png'
-    ];
+    ]
 
     IMAGES_DEAD = [
         'img/4_enemie_boss_chicken/5_dead/G24.png',
         'img/4_enemie_boss_chicken/5_dead/G25.png',
         'img/4_enemie_boss_chicken/5_dead/G26.png'
-    ];
+    ]
 
     width = 150;
     height = 240;
@@ -55,10 +55,14 @@ class Endboss extends MovableObject {
     alertTriggered = false;
     hasStartedWalking = false;
 
-    // ✅ NEU: Bewegungsrichtung (false = links, true = rechts)
+    /**
+     * NEU:
+     * Steuert, ob der Boss nach rechts laufen soll (true) oder nach links (false).
+     * Wird anhand deiner "drüber gesprungen"-Regel berechnet.
+     */
     moveToRight = false;
 
-    constructor() {
+    constructor(){
         super();
         this.loadImage(this.IMAGES_IDLE[0]);
         this.loadImages(this.IMAGES_WALKING);
@@ -78,16 +82,16 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * ✅ NEU:
-     * "Übersprungen" nach deiner Definition:
-     * Pepes linke Seite MIT Offset ist hinter dem Boss,
-     * also hinter der rechten Boss-Seite MIT Offset.
+     * NEU:
+     * Erkennt "Pepe ist über den Endboss gesprungen" exakt nach deiner Definition:
+     * Pepes linke Seite MIT Offset (left: 25) ist hinter dem Endboss,
+     * also hinter der rechten Seite MIT Offset (right: 15).
      *
-     * Ergebnis:
-     * - Bewegung nach rechts
-     * - Bild spiegeln (otherDirection), damit World.flipImage greift
+     * Daraus leiten wir ab:
+     * - Bewegung: moveRight statt moveLeft
+     * - Spiegelung: otherDirection = true (damit World.flipImage() greift)
      */
-    updateDirectionByCharacter() {
+    updateMovementDirectionByCharacterPosition() {
         const character = this.world.character;
 
         const pepeLeftWithOffset = character.x + character.offset.left;
@@ -97,7 +101,7 @@ class Endboss extends MovableObject {
 
         if (pepeIsBehindBoss) {
             this.moveToRight = true;
-            this.otherDirection = true;   // Spiegelung beim Zeichnen
+            this.otherDirection = true;   // Bild spiegeln über World.flipImage()
         } else {
             this.moveToRight = false;
             this.otherDirection = false;  // normal zeichnen
@@ -114,12 +118,12 @@ class Endboss extends MovableObject {
                 return;
             }
 
-            // ✅ NEU: Richtung laufend aktualisieren
-            this.updateDirectionByCharacter();
+            // NEU: Richtung (links/rechts) aus Peppes Position ableiten
+            this.updateMovementDirectionByCharacterPosition();
 
             const distance = Math.abs(this.x - this.world.character.x);
 
-            // Trigger: einmalig aktivieren, sobald du in 600px kommst
+            // Trigger: einmalig aktivieren, sobald du in 500px kommst
             if (!this.hasStartedWalking && distance <= WALK_DISTANCE) {
                 this.hasStartedWalking = true;
             }
@@ -129,7 +133,7 @@ class Endboss extends MovableObject {
                 return;
             }
 
-            // Sobald aktiviert: weiterlaufen (links oder rechts)
+            // Sobald aktiviert: weiterlaufen, auch wenn distance wieder > WALK_DISTANCE wird
             if (this.hasStartedWalking) {
                 if (this.moveToRight) {
                     this.moveRight();
@@ -145,8 +149,8 @@ class Endboss extends MovableObject {
                 return;
             }
 
-            // ✅ NEU: Richtung auch für Spiegelung/Optik aktuell halten
-            this.updateDirectionByCharacter();
+            // NEU: Spiegelung (otherDirection) soll auch für das Zeichnen passen
+            this.updateMovementDirectionByCharacterPosition();
 
             const distance = Math.abs(this.x - this.world.character.x);
 
@@ -182,6 +186,6 @@ class Endboss extends MovableObject {
 
             // Aktiviert und nicht im Alert: WALK loopen
             this.setAnimation('walk', this.IMAGES_WALKING, true);
-        }, 125);
+        }, 150);
     }
 }

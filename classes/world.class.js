@@ -24,6 +24,12 @@ class World {
 
     setWorld(){
         this.character.world = this;
+        
+        this.level.enemies.forEach(enemy => {
+            if (enemy instanceof Endboss) {
+                enemy.world = this;
+            }
+        });
     }
 
 
@@ -64,7 +70,7 @@ class World {
         this.checkBottleCollection();
         this.checkRegularEnemyCollision();
         this.checkBottleWithBottomCollision();
-        this.checkBottleWithRegularEnemyCollision();
+        this.checkBottleWithEnemyCollision();
     }
 
 
@@ -167,7 +173,7 @@ class World {
     }
 
 
-    checkBottleWithRegularEnemyCollision() {
+    checkBottleWithEnemyCollision() {
         for (let i = this.throwableObjects.length - 1; i >= 0; i--) {
             const bottle = this.throwableObjects[i];
 
