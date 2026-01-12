@@ -46,17 +46,29 @@ class Endboss extends MovableObject {
 
     width = 150;
     height = 240;
-    x = 720;
+    x = 5000;
     y = 200;
 
-    speed = 1.0;
+    speed = 1.2;
 
     world;
     alertTriggered = false;
     hasStartedWalking = false;
 
-    // ✅ NEU: Bewegungsrichtung (false = links, true = rechts)
+    /**
+     * Steuert, ob der Boss nach rechts laufen soll (true) oder nach links (false).
+     * Wird anhand deiner "drüber gesprungen"-Regel berechnet.
+     */
     moveToRight = false;
+
+    // ─────────────────────────────────────────────
+    // NEU: Attack-Status (nicht abbrechbar sobald gestartet)
+    // ─────────────────────────────────────────────
+    isAttacking = false;
+    attackStartX = 0;
+    attackDirectionRight = false;
+    attackSpeed = 0;
+    normalSpeed = 0;
 
     constructor() {
         super();
@@ -78,16 +90,15 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * ✅ NEU:
-     * "Übersprungen" nach deiner Definition:
-     * Pepes linke Seite MIT Offset ist hinter dem Boss,
-     * also hinter der rechten Boss-Seite MIT Offset.
+     * Erkennt "Pepe ist über den Endboss gesprungen" exakt nach deiner Definition:
+     * Pepes linke Seite MIT Offset ist hinter dem Endboss,
+     * also hinter der rechten Seite MIT Offset.
      *
-     * Ergebnis:
-     * - Bewegung nach rechts
-     * - Bild spiegeln (otherDirection), damit World.flipImage greift
+     * Daraus leiten wir ab:
+     * - Bewegung: moveRight statt moveLeft
+     * - Spiegelung: otherDirection = true (damit World.flipImage() greift)
      */
-    updateDirectionByCharacter() {
+    updateMovementDirectionByCharacterPosition() {
         const character = this.world.character;
 
         const pepeLeftWithOffset = character.x + character.offset.left;
@@ -97,16 +108,19 @@ class Endboss extends MovableObject {
 
         if (pepeIsBehindBoss) {
             this.moveToRight = true;
-            this.otherDirection = true;   // Spiegelung beim Zeichnen
+            this.otherDirection = true;
         } else {
             this.moveToRight = false;
-            this.otherDirection = false;  // normal zeichnen
+            this.otherDirection = false;
         }
     }
 
     animate() {
         const WALK_DISTANCE = 600;
-        const ALERT_DISTANCE = 300;
+        const ALERT_DISTANCE = 350;
+
+        const ATTACK_DISTANCE = 600;
+        const ANIMATION_INTERVAL_MS = 100;
 
         // 1) Bewegung (smooth)
         setInterval(() => {
@@ -114,22 +128,52 @@ class Endboss extends MovableObject {
                 return;
             }
 
-            // ✅ NEU: Richtung laufend aktualisieren
-            this.updateDirectionByCharacter();
+            // Während des Attacks: Richtung ist gelockt, nicht neu berechnen
+            if (!this.isAttacking) {
+                this.updateMovementDirectionByCharacterPosition();
+            } else {
+                // sorgt dafür, dass das Bild während des Attacks nicht plötzlich flippt
+                this.otherDirection = this.attackDirectionRight;
+            }
 
             const distance = Math.abs(this.x - this.world.character.x);
 
-            // Trigger: einmalig aktivieren, sobald du in 600px kommst
+            // Aktivierung: einmalig
             if (!this.hasStartedWalking && distance <= WALK_DISTANCE) {
                 this.hasStartedWalking = true;
             }
 
-            // Im Alert-Bereich: stehen bleiben
+            // ─────────────────────────────────────────────
+            // ATTACK: sprintet immer die vollen 600px (nicht abbrechbar)
+            // ─────────────────────────────────────────────
+            if (this.isAttacking) {
+                const traveled = Math.abs(this.x - this.attackStartX);
+
+                if (traveled >= ATTACK_DISTANCE) {
+                    this.isAttacking = false;
+                    this.speed = this.normalSpeed;
+
+                    this.alertTriggered = false;
+                    this.currentAnimation = 'idle';
+                    return;
+                }
+
+                this.speed = this.attackSpeed;
+
+                if (this.attackDirectionRight) {
+                    this.moveRight();
+                } else {
+                    this.moveLeft();
+                }
+                return;
+            }
+
+            // Im Alert-Bereich: stehen bleiben (Alert kann abbrechen, Attack startet später)
             if (distance < ALERT_DISTANCE) {
                 return;
             }
 
-            // Sobald aktiviert: weiterlaufen (links oder rechts)
+            // Normal laufen
             if (this.hasStartedWalking) {
                 if (this.moveToRight) {
                     this.moveRight();
@@ -145,17 +189,24 @@ class Endboss extends MovableObject {
                 return;
             }
 
-            // ✅ NEU: Richtung auch für Spiegelung/Optik aktuell halten
-            this.updateDirectionByCharacter();
+            // Während des Attacks: Animation weiter ticken, sonst normale Richtungslogik
+            if (this.isAttacking) {
+                this.otherDirection = this.attackDirectionRight;
+                this.setAnimation('attack', this.IMAGES_ATTACK, false);
+                return;
+            }
+
+            this.updateMovementDirectionByCharacterPosition();
 
             const distance = Math.abs(this.x - this.world.character.x);
 
-            // Trigger auch hier setzen (falls Animationstakt zuerst greift)
             if (!this.hasStartedWalking && distance <= WALK_DISTANCE) {
                 this.hasStartedWalking = true;
             }
 
-            // < 300px → ALERT (einmal starten + weiterlaufen lassen)
+            // ─────────────────────────────────────────────
+            // ALERT (< 300px): bis zum letzten Frame abbrechbar
+            // ─────────────────────────────────────────────
             if (distance < ALERT_DISTANCE) {
                 if (!this.alertTriggered) {
                     this.alertTriggered = true;
@@ -165,14 +216,35 @@ class Endboss extends MovableObject {
 
                 if (this.currentAnimation === 'alert') {
                     this.setAnimation('alert', this.IMAGES_ALERT, false);
+
+                    // ─────────────────────────────────────────────
+                    // NEU: Wenn letzter Alert-Frame erreicht → Attack starten (nicht abbrechbar)
+                    // ─────────────────────────────────────────────
+                    if (this.currentImageIndex >= this.IMAGES_ALERT.length - 1) {
+                        // Richtung beim Start des Attacks fixieren (in Richtung Character)
+                        this.attackDirectionRight = this.moveToRight;
+                        this.otherDirection = this.attackDirectionRight;
+
+                        // Attack-Speed so berechnen, dass wir in etwa mit der Attack-Animation 600px schaffen
+                        this.normalSpeed = this.speed;
+                        const durationSeconds = (this.IMAGES_ATTACK.length * ANIMATION_INTERVAL_MS) / 1000;
+                        this.attackSpeed = ATTACK_DISTANCE / (durationSeconds * 60);
+
+                        this.attackStartX = this.x;
+                        this.isAttacking = true;
+
+                        // Attack-Animation sauber bei Frame 0 starten
+                        this.currentAnimation = 'idle';
+                        this.setAnimation('attack', this.IMAGES_ATTACK, false);
+                    }
                 }
                 return;
             }
 
-            // Außerhalb Alert: Reset, damit Alert beim nächsten Unterschreiten wieder triggert
+            // Außerhalb Alert: Reset (damit Alert beim nächsten Unterschreiten wieder neu starten kann)
             this.alertTriggered = false;
 
-            // Solange nicht aktiviert: IDLE (1 Bild)
+            // Idle vor Aktivierung
             if (!this.hasStartedWalking) {
                 if (this.currentAnimation !== 'idle') {
                     this.setAnimation('idle', this.IMAGES_IDLE, false);
@@ -180,8 +252,8 @@ class Endboss extends MovableObject {
                 return;
             }
 
-            // Aktiviert und nicht im Alert: WALK loopen
+            // Walk im Normalbetrieb
             this.setAnimation('walk', this.IMAGES_WALKING, true);
-        }, 125);
+        }, ANIMATION_INTERVAL_MS);
     }
 }
