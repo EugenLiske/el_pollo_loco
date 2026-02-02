@@ -46,7 +46,7 @@ class Endboss extends MovableObject {
 
     width = 150;
     height = 240;
-    x = 5000;
+    x = 1000;
     y = 200;
 
     speed = 1.2;
@@ -112,6 +112,25 @@ class Endboss extends MovableObject {
         } else {
             this.moveToRight = false;
             this.otherDirection = false;
+        }
+    }
+
+    hitByPepe() {
+        if (this.isAttacking) {
+            return;
+        }
+
+        if (this.isDead()) {
+            return;
+        }
+
+        this.energy -= 20;
+
+        if (this.energy <= 0) {
+            this.energy = 0;
+            this.currentImageIndex = 0;
+        } else {
+            this.lastHit = new Date().getTime();
         }
     }
 
@@ -202,6 +221,15 @@ class Endboss extends MovableObject {
 
             if (!this.hasStartedWalking && distance <= WALK_DISTANCE) {
                 this.hasStartedWalking = true;
+            }
+
+            // ✅ NEW: HURT-Animation (nur außerhalb ATTACK)
+            // Priorität: HURT vor ALERT/WALK, damit Treffer sofort sichtbar wird.
+            // Wichtig: alertTriggered resetten, damit der Alert danach sauber wieder starten kann.
+            if (this.isHurt()) { // ✅ NEW
+                this.alertTriggered = false; // ✅ NEW
+                this.setAnimation('hurt', this.IMAGES_HURT, true); // ✅ NEW
+                return; // ✅ NEW
             }
 
             // ─────────────────────────────────────────────

@@ -51,7 +51,7 @@ class MovableObject extends DrawableObject {
     }
 
     
-    hit() {
+    hitByEnemy() {
         if (this.isDead()) {
             return;
         }

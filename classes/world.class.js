@@ -140,7 +140,7 @@ class World {
                     }, 500);
 
                 } else {
-                    this.character.hit();
+                    this.character.hitByEnemy();
                     this.statusBar.setPercentage(this.character.energy);
                 }
             }
@@ -194,6 +194,10 @@ class World {
                     bottle.speedY = 0;
                     bottle.acceleration = 0;
                     bottle.setAnimation('splash', bottle.IMAGES_BOTTLE_SPLASH, false);
+
+                    if (enemy instanceof Endboss) {
+                        enemy.hitByPepe();
+                    }
 
                     setTimeout(() => {
                         const index = this.throwableObjects.indexOf(bottle);
