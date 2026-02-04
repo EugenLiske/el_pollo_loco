@@ -8,6 +8,7 @@ class World {
     statusBar = new StatusBar(30, 0, 'health');
     statusBarCoins = new StatusBar(190, 0, 'coins');
     statusBarBottles = new StatusBar(350, 0, 'bottles');
+    statusBarEndbossHealth = new StatusBar(900, 0, 'endbossHealth');
     throwableObjects = [];
     lastThrowTime = 0;
 
@@ -130,7 +131,7 @@ class World {
                 if (enemy instanceof Chicken && this.isCharacterStompingEnemy(enemy)) {
                     enemy.die();
 
-                    this.character.speedY = 15;
+                    this.character.speedY = 5;
 
                     setTimeout(() => {
                         const index = this.level.enemies.indexOf(enemy);
@@ -197,6 +198,7 @@ class World {
 
                     if (enemy instanceof Endboss) {
                         enemy.hitByPepe();
+                        this.statusBarEndbossHealth.setEndbossHealthPercentage(enemy.energy);
                     }
 
                     setTimeout(() => {
@@ -245,6 +247,7 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.statusBarCoins);
         this.addToMap(this.statusBarBottles);
+        this.addToMap(this.statusBarEndbossHealth);
         //--------- space for fixed objects ---------
         this.ctx.translate(this.camera_x, 0);
 

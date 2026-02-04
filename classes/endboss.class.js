@@ -129,6 +129,15 @@ class Endboss extends MovableObject {
         if (this.energy <= 0) {
             this.energy = 0;
             this.currentImageIndex = 0;
+
+            // ✅ NEW: Sofort alles stoppen / resetten, damit nichts mehr "weitergleitet"
+            this.isAttacking = false;          // Attack sofort beenden
+            this.speed = 0;                    // Bewegung sofort stoppen
+            this.alertTriggered = false;       // Alert-State zurücksetzen
+
+            // ✅ NEW: Death sofort anstoßen (damit nicht erst beim nächsten Interval sichtbar)
+            this.currentAnimation = 'idle';    // garantiert "Wechsel" auf dead
+            this.setAnimation('dead', this.IMAGES_DEAD, false);
         } else {
             this.lastHit = new Date().getTime();
         }
@@ -144,6 +153,12 @@ class Endboss extends MovableObject {
         // 1) Bewegung (smooth)
         setInterval(() => {
             if (!this.world || !this.world.character) {
+                return;
+            }
+
+            // ✅ NEW: Wenn tot → keinerlei Bewegung mehr
+            if (this.isDead()) {
+                this.speed = 0;
                 return;
             }
 
@@ -205,6 +220,14 @@ class Endboss extends MovableObject {
         // 2) Animation (Frames wechseln)
         setInterval(() => {
             if (!this.world || !this.world.character) {
+                return;
+            }
+
+            // ✅ NEW: Death hat höchste Priorität und läuft 1x durch (loop=false)
+            if (this.isDead()) {
+                this.isAttacking = false;       // falls er während/kurz nach Attack stirbt
+                this.alertTriggered = false;    // saubere Zustände
+                this.setAnimation('dead', this.IMAGES_DEAD, false);
                 return;
             }
 

@@ -26,9 +26,19 @@ class StatusBar extends DrawableObject {
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/100.png'
     ];
 
+    IMAGES_ENDBOSS_HEALTH = [
+        'img/7_statusbars/2_statusbar_endboss/blue/blue0.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue20.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue40.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue60.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue80.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue100.png'
+    ]
+
     percentage = 100;
     collectedCoinsPercentage = 0;
     collectedBottlesPercentage = 0;
+    endbossHealthPercentage = 100;
     type;
 
     constructor(x, y, type){
@@ -47,6 +57,10 @@ class StatusBar extends DrawableObject {
         } else if(this.type === 'bottles') {
             this.loadImages(this.IMAGES_BOTTLES_BAR);
             this.setCollectedBottlesPercentage(this.collectedBottlesPercentage);
+
+        } else if(this.type === 'endbossHealth') {
+            this.loadImages(this.IMAGES_ENDBOSS_HEALTH);
+            this.setEndbossHealthPercentage(this.endbossHealthPercentage);
         }
         
         this.x = x;
@@ -74,6 +88,12 @@ class StatusBar extends DrawableObject {
         this.img = this.imageCache[path];
     }
 
+    setEndbossHealthPercentage(endbossHealthPercentage){
+        this.endbossHealthPercentage = endbossHealthPercentage;
+        let path = this.IMAGES_ENDBOSS_HEALTH[this.resolveImageIndex()];
+        this.img = this.imageCache[path];
+    }
+
 
     resolveImageIndex(){
         if (this.type === 'health') {
@@ -98,6 +118,16 @@ class StatusBar extends DrawableObject {
 
         if (this.type === 'bottles') {
             const p = this.collectedBottlesPercentage;
+            if (p === 100)      return 5;
+            else if (p >= 80)   return 4;
+            else if (p >= 60)   return 3;
+            else if (p >= 40)   return 2;
+            else if (p >= 20)   return 1;
+            else                return 0;
+        }
+
+        if (this.type === 'endbossHealth') {
+            const p = this.endbossHealthPercentage;
             if (p === 100)      return 5;
             else if (p >= 80)   return 4;
             else if (p >= 60)   return 3;
