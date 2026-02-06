@@ -7,3 +7,8 @@ body {
 canvas {
     background-color: black;
 }
+
+.startScreen {
+    height: 480px;
+    width: 1080px;
+}
