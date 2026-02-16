@@ -9,8 +9,8 @@ class Character extends MovableObject {
     ];
 
     IMAGES_JUMPING = [
-        // 'img/2_character_pepe/3_jump/J-31.png',
-        // 'img/2_character_pepe/3_jump/J-32.png',
+        'img/2_character_pepe/3_jump/J-31.png',
+        'img/2_character_pepe/3_jump/J-32.png',
         'img/2_character_pepe/3_jump/J-33.png',
         'img/2_character_pepe/3_jump/J-34.png',
         'img/2_character_pepe/3_jump/J-35.png',
@@ -66,11 +66,6 @@ class Character extends MovableObject {
     speed = 5;
     idleToSleepCounter = 0;
 
-    // ✅ NEW: Jump-Animation über die gesamte Flugzeit strecken
-    jumpStartTime = 0;         // ✅ NEW
-    jumpDurationMs = 0;        // ✅ NEW
-    jumpInitialSpeedY = 23;    // ✅ NEW (entspricht deinem jump(): speedY = 23)
-
     constructor(){
         super();
         this.loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -92,46 +87,6 @@ class Character extends MovableObject {
         this.animate();
     }
 
-    // ✅ NEW: Sprungdauer anhand deiner Gravity-Logik berechnen (applyGravity läuft mit 25 FPS, acceleration = 1)
-    initJumpTiming() { // ✅ NEW
-        this.jumpStartTime = Date.now();
-
-        // applyGravity() tickt alle 1000/25 ms
-        const GRAVITY_FPS = 25;
-        const framesUp = this.jumpInitialSpeedY / this.acceleration; // bei acceleration=1 -> 23 Frames nach oben
-        const totalFrames = 2 * framesUp; // hoch + runter (vereinfachtes Modell)
-
-        this.jumpDurationMs = (totalFrames / GRAVITY_FPS) * 1000;
-    }
-
-    // ✅ NEW: Jump-Frames einmalig über die gesamte Flugzeit verteilen (statt Looping)
-    playJumpAnimationStretched() { // ✅ NEW
-        if (!this.jumpStartTime || !this.jumpDurationMs) {
-            this.initJumpTiming();
-        }
-
-        const now = Date.now();
-        const elapsed = now - this.jumpStartTime;
-        const duration = Math.max(1, this.jumpDurationMs);
-
-        // Fortschritt 0..1 über die gesamte Jump-Dauer
-        const progress = Math.min(1, elapsed / duration);
-
-        // Frame-Index passend zum Fortschritt (0..lastIndex)
-        const lastIndex = this.IMAGES_JUMPING.length - 1;
-        const frameIndex = Math.floor(progress * lastIndex);
-
-        // Hier setzen wir das Bild direkt, damit es NICHT loopen kann.
-        if (this.currentAnimation !== 'jump') {
-            this.currentAnimation = 'jump';
-        }
-
-        this.currentImageIndex = frameIndex;
-
-        const path = this.IMAGES_JUMPING[frameIndex];
-        this.img = this.imageCache[path];
-    }
-
     animate(){
         setInterval(() => {
             if (this.isDead()) {
@@ -150,11 +105,9 @@ class Character extends MovableObject {
 
             if((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround()){
                 this.jump();
-                // ✅ NEW: Beim Absprung Timing starten, damit die Jump-Frames über die ganze Flugzeit gestreckt werden
-                this.initJumpTiming(); // ✅ NEW
             }            
 
-            this.world.camera_x = -this.x + 250;
+            this.world.camera_x = -this.x + 150;
         }, 1000 / 60)
 
         setInterval(() => {
@@ -167,23 +120,14 @@ class Character extends MovableObject {
                 this.idleToSleepCounter = 0;
 
             } else if (this.isAboveGround()) {
-                // ✅ CHANGED: Jump-Animation nicht loopen, sondern einmalig über die Flugzeit strecken
-                this.playJumpAnimationStretched(); // ✅ NEW
+                this.setAnimation('jump', this.IMAGES_JUMPING);
                 this.idleToSleepCounter = 0;
 
             } else if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT){
-                // ✅ NEW: Sobald wir wieder am Boden sind, Jump-Timing zurücksetzen (nächster Sprung startet sauber)
-                this.jumpStartTime = 0; // ✅ NEW
-                this.jumpDurationMs = 0; // ✅ NEW
-
                 this.setAnimation('walk', this.IMAGES_WALKING);
                 this.idleToSleepCounter = 0;
 
             } else {
-                // ✅ NEW: Sobald wir wieder am Boden sind, Jump-Timing zurücksetzen (nächster Sprung startet sauber)
-                this.jumpStartTime = 0; // ✅ NEW
-                this.jumpDurationMs = 0; // ✅ NEW
-
                 if (this.idleToSleepCounter >= 50) {
                     this.setAnimation('idleSleep', this.IMAGES_IDLE_LONG);
                 } else {

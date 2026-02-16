@@ -5,10 +5,10 @@ class World {
     canvas;
     keyboard;
     camera_x = 0;
-    statusBar = new StatusBar(30, 0, 'health');
-    statusBarCoins = new StatusBar(190, 0, 'coins');
-    statusBarBottles = new StatusBar(350, 0, 'bottles');
-    statusBarEndbossHealth = new StatusBar(900, 0, 'endbossHealth');
+    statusBar = new StatusBar(20, -5, 'health');
+    statusBarCoins = new StatusBar(20, 35, 'coins');
+    statusBarBottles = new StatusBar(20, 75, 'bottles');
+    statusBarEndbossHealth = new StatusBar(550, 0, 'endbossHealth');
     throwableObjects = [];
     lastThrowTime = 0;
 
@@ -140,9 +140,13 @@ class World {
                         }
                     }, 500);
 
+                } else if(enemy instanceof Endboss){
+                    this.character.hitByEndboss();
+                    this.statusBar.setPercentage(this.character.energy);
                 } else {
                     this.character.hitByEnemy();
                     this.statusBar.setPercentage(this.character.energy);
+                    
                 }
             }
         }

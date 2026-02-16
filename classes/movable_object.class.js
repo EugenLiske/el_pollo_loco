@@ -23,7 +23,7 @@ class MovableObject extends DrawableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
-        }, 1000 / 60)
+        }, 1000 / 25)
     }
 
 
@@ -57,6 +57,21 @@ class MovableObject extends DrawableObject {
         }
 
         this.energy -= 2;
+
+        if (this.energy <= 0) {
+            this.energy = 0;              
+            this.currentImageIndex = 0; 
+        } else {
+            this.lastHit = new Date().getTime();
+        }
+    }
+
+    hitByEndboss() {
+        if (this.isDead()) {
+            return;
+        }
+
+        this.energy -= 10;
 
         if (this.energy <= 0) {
             this.energy = 0;              
