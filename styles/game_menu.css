@@ -1,0 +1,136 @@
+.button_container {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 32px;
+    width: 100%;
+}
+
+.menu_button {
+    height: 64px;
+    width: 224px;
+    background-image: url(/img/5_background/flat-design-wood-texture-illustration/6662364.jpg);
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgb(0, 0, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    color: rgb(255,215,0);
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+    transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+}
+
+.menu_button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+}
+
+dialog {
+    background-image: url(/img/5_background/flat-design-wood-texture-illustration/6662364.jpg);
+    border: 5px solid rgb(102, 31, 0);
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 80vh;
+    outline: none;
+    box-shadow: none;
+    font-size: 24px;
+    overflow-y: auto;
+    width: 60%;
+    padding: 24px;
+}
+
+.dialog_content {
+    display: block;
+}
+
+/* Scrollbar Breite */
+dialog::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Hintergrund der Leiste */
+dialog::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+}
+
+/* Der bewegliche Slider */
+dialog::-webkit-scrollbar-thumb {
+    background: rgb(102, 31, 0); /* dein brauner Farbton */
+    border-radius: 10px;
+}
+
+/* Hover Effekt */
+dialog::-webkit-scrollbar-thumb:hover {
+    background: rgb(140, 50, 10);
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+    font-size: 64px;
+}
+
+h2 {
+    font-size: 40px;
+    margin-bottom: 16px;
+}
+
+h3 {
+    font-size: 32px;
+}
+
+p {
+    margin-bottom: 40px;
+}
+
+.dialog_header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.close_button {
+    height: 64px;
+    width: 64px;
+    cursor: pointer;
+    transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+}
+
+.close_button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.game_elements {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 8px;
+}
+
+.game_element {
+    list-style: none;
+}
+
+.element_header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.element_header img {
+    height: 80px;
+}

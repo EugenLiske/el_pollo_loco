@@ -64,3 +64,28 @@ window.addEventListener("keyup", (event) => {
         keyboard.D = false;
     }
 });
+
+function openDialog(menuReference){
+    let dialogRef = document.getElementById(menuReference);
+    dialogRef.showModal();
+}
+
+function closeDialog(menuReference){
+    let dialogRef = document.getElementById(menuReference);
+    dialogRef.close();
+}
+
+function closeDialogOnOutsideClick(event) {
+    const dialog = event.currentTarget;
+    const rect = dialog.getBoundingClientRect();
+
+    const clickedOutside =
+        event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom;
+
+    if (clickedOutside) {
+        dialog.close();
+    }
+}
