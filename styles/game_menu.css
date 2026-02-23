@@ -25,6 +25,7 @@
         -1px  1px 0 black,
          1px  1px 0 black;
     transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+    letter-spacing: 0.5px;
 }
 
 .menu_button:hover {
@@ -45,7 +46,7 @@ dialog {
     box-shadow: none;
     font-size: 24px;
     overflow-y: auto;
-    width: 60%;
+    width: 720px;
     padding: 24px;
 }
 
@@ -79,27 +80,58 @@ h1 {
     display: flex;
     justify-content: center;
     font-size: 64px;
+    margin-bottom: 16px;
+    color: rgb(255,215,0);
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+    letter-spacing: 1.5px;
 }
 
 h2 {
     font-size: 40px;
     margin-bottom: 16px;
+    color: rgb(255,215,0);
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+    letter-spacing: 1.5px;
 }
 
 h3 {
     font-size: 32px;
+    color: rgb(255,215,0);
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+    letter-spacing: 1.5px;
 }
 
 p {
     margin-bottom: 40px;
 }
 
-.dialog_header {
+.dialog_header{
+    position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+}
+
+.position_support_container {
+    width: 64px;
 }
 
 .close_button {
+    position: absolute;
+    right: 0;
+    top: 0;
     height: 64px;
     width: 64px;
     cursor: pointer;
@@ -133,4 +165,16 @@ p {
 
 .element_header img {
     height: 80px;
+}
+
+.imprint p {
+    margin-bottom: 20px;
+}
+
+.imprint a {
+    color: black;
+}
+
+.imprint a:hover {
+    text-decoration: underline;
 }

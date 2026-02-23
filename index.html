@@ -16,132 +16,162 @@
 
     <div class="button_container">
         <div class="menu_button" onclick="openDialog('gameInformation')">Spielinfo</div>
-        <div class="menu_button">Impressum</div>
+        <div class="menu_button" onclick="openDialog('imprint')">Impressum</div>
         <div class="menu_button">Referenzen</div>
     </div>
 
     <dialog id="gameInformation" onclick="closeDialogOnOutsideClick(event)">
-        <!-- <div class="dialog_content" onclick="event.stopPropagation()"> -->
-            <header class="dialog_header">
-                <div></div>
-                <h1>
-                    El Pollo Loco
-                </h1>
-                <img onclick="closeDialog('gameInformation')" class="close_button" src="./img/10_menu_elements/close_button.png" alt="close_button">
-            </header>
+        <header class="dialog_header">
+            <h1>
+                El Pollo Loco
+            </h1>
+            <img onclick="closeDialog('gameInformation')" class="close_button" src="./img/10_menu_elements/close_button.png" alt="close_button">
+        </header>
 
-            <section>
-                <h2>
+        <section>
+            <h2>
                     Spielbeschreibung
-                </h2>
-                <p>
-                    In El Pollo Loco steuerst du Pepe durch eine lebendige Wüstenlandschaft, in der Señora Gallina und ihre Hühner die Gegend
-                    unsicher machen. Mit schnellen Sprüngen, geschicktem Ausweichen und gutem Timing stellst du dich den Hühnern, sammelst
-                    Münzen und nutzt Salsaflaschen, um dich zu verteidigen. Der Höhepunkt erwartet dich im Aufeinandertreffen mit Señora
-                    Gallina – sei gewarnt, viele Reisende sind bereits an ihr gescheitert. Nimm die Herausforderung an und befreie die Wüste
-                    von der Herrschaft der Hühner.
-                </p>
-            </section>
+            </h2>
+            <p>
+                In El Pollo Loco steuerst du Pepe durch eine lebendige Wüstenlandschaft, in der Señora Gallina und ihre Hühner die Gegend
+                unsicher machen. Mit schnellen Sprüngen, geschicktem Ausweichen und gutem Timing stellst du dich den Hühnern, sammelst
+                Münzen und nutzt Salsaflaschen, um dich zu verteidigen. Der Höhepunkt erwartet dich im Aufeinandertreffen mit Señora
+                Gallina – sei gewarnt, viele Reisende sind bereits an ihr gescheitert. Nimm die Herausforderung an und befreie die Wüste
+                von der Herrschaft der Hühner.
+            </p>
+        </section>
 
-            <section>
-                <h2>
-                    Spielelemente
-                </h2>
-                <ul class="game_elements">
-                    <li class="game_element">
-                        <div class="element_header">
-                            <img src="./img/10_menu_elements/pepe.png" alt="Pepe">
-                            <h3>Pepe</h3>
-                        </div>
+        <section>
+            <h2>
+                Spielelemente
+            </h2>
+            <ul class="game_elements">
+                <li class="game_element">
+                    <div class="element_header">
+                        <img src="./img/10_menu_elements/pepe.png" alt="Pepe">
+                        <h3>Pepe</h3>
+                    </div>
 
-                        <p>
-                            Unser mutiger Held Pepe, den du bei der Befreiung der Wüste begleiten wirst. Achte auf seine Energie, diese spiegelt
-                            Pepes Zustand wider. Fällt sie auf 0, musst du das Abenteuer von vorne beginnen. 
-                        </p>
-                    </li>
+                    <p>
+                        Unser mutiger Held Pepe, den du bei der Befreiung der Wüste begleiten wirst. Achte auf seine Energie, diese spiegelt
+                        Pepes Zustand wider. Fällt sie auf 0, musst du das Abenteuer von vorne beginnen. 
+                    </p>
+                </li>
 
-                    <li class="game_element">
-                        <div class="element_header">
-                            <img src="./img/10_menu_elements/chicken_normal.png" alt="chicken_normal">
-                            <h3>Normale Hühner</h3>
-                        </div>
+                <li class="game_element">
+                    <div class="element_header">
+                        <img src="./img/10_menu_elements/chicken_normal.png" alt="chicken_normal">
+                        <h3>Normale Hühner</h3>
+                    </div>
 
-                        <p>
-                            Sie gehören zu Señora Gallinas Gefolgschaft. Bei Kollision erleidet Pepe Schaden. Du kannst sie mit einem
-                            geschickten Sprung von oben ausschalten oder mit einem gezielten Wurf einer Salsaflasche aus der Ferne eliminieren.
-                        </p>
-                    </li>
+                    <p>
+                        Sie gehören zu Señora Gallinas Gefolgschaft. Bei Kollision erleidet Pepe Schaden. Du kannst sie mit einem
+                        geschickten Sprung von oben ausschalten oder mit einem gezielten Wurf einer Salsaflasche aus der Ferne eliminieren.
+                    </p>
+                </li>
 
-                    <li class="game_element">
-                        <div class="element_header">
-                            <img src="./img/10_menu_elements/chicken_small.png" alt="chicken_small">
-                            <h3>Kleine Hühner</h3>
-                        </div>
+                <li class="game_element">
+                    <div class="element_header">
+                        <img src="./img/10_menu_elements/chicken_small.png" alt="chicken_small">
+                        <h3>Kleine Hühner</h3>
+                    </div>
 
-                        <p>
-                            Diese kleinen frechen Hühner sind nicht weniger gefährlich. Bei Kollision erleidet Pepe gleichen Schaden wie bei den
-                            etwas größeren Hühnern. Auch sie kannst du mit einem Sprung von oben oder einem Treffer mit der Salsaflasche
-                            ausschalten.
-                        </p>
-                    </li>
+                    <p>
+                        Diese kleinen frechen Hühner sind nicht weniger gefährlich. Bei Kollision erleidet Pepe gleichen Schaden wie bei den
+                        etwas größeren Hühnern. Auch sie kannst du mit einem Sprung von oben oder einem Treffer mit der Salsaflasche
+                        ausschalten.
+                    </p>
+                </li>
 
-                    <li class="game_element">
-                        <div class="element_header">
-                            <img src="./img/10_menu_elements/boss_chicken.png" alt="boss_chicken">
-                            <h3>Señora Gallina</h3>
-                        </div>
+                <li class="game_element">
+                    <div class="element_header">
+                        <img src="./img/10_menu_elements/boss_chicken.png" alt="boss_chicken">
+                        <h3>Señora Gallina</h3>
+                    </div>
 
-                        <p>
-                            Der Endboss, die gefürchtete Señora Gallina. Vorsicht! Sie lässt sich <b>nicht</b> durch einen Sprung von oben
-                            besiegen. Sie ist nur durch Salsaflaschen verwundbar. Zudem verursacht ein Treffer von ihr deutlich mehr Schaden.
-                            Sei gewarnt, sobald sie dich erblickt, wird sie keine Ruhe geben, bis sie dich niedergetrampelt hat.
-                        </p>
-                    </li>
+                    <p>
+                        Der Endboss, die gefürchtete Señora Gallina. Vorsicht! Sie lässt sich <b>nicht</b> durch einen Sprung von oben
+                        besiegen. Sie ist nur durch Salsaflaschen verwundbar. Zudem verursacht ein Treffer von ihr deutlich mehr Schaden.
+                        Sei gewarnt, sobald sie dich erblickt, wird sie keine Ruhe geben, bis sie dich niedergetrampelt hat.
+                    </p>
+                </li>
 
-                    <li class="game_element">
-                        <div class="element_header">
-                            <img src="./img/10_menu_elements/salsa_bottle.png" alt="salsa_bottle">
-                            <h3>Salsaflasche</h3>
-                        </div>
+                <li class="game_element">
+                    <div class="element_header">
+                        <img src="./img/10_menu_elements/salsa_bottle.png" alt="salsa_bottle">
+                        <h3>Salsaflasche</h3>
+                    </div>
 
-                        <p>
-                            Halte Ausschau nach diesen Salsaflaschen. Sie sind in der gesammten Spielwelt verteilt. Achtung!
-                            Ihre Anzahl ist begrenzt. Und sie sind das einzige Mittel, um Señora Gallina zu besiegen.
-                        </p>
-                    </li>
+                    <p>
+                        Halte Ausschau nach diesen besonderen Flaschen. Sie beinhalten eine feurige Salsasoße, Señora Gallinas Schwäche
+                        und somit das einzige Mittel, um sie zu besiegen. Sie sind in der gesammten Spielwelt verteilt. Aber Achtung!
+                        Ihre Anzahl ist <b>begrenzt</b>.
+                    </p>
+                </li>
 
-                    <li class="game_element">
-                        <div class="element_header">
-                            <img src="./img/10_menu_elements/coin.png" alt="coin">
-                            <h3>Münze</h3>
-                        </div>
+                <li class="game_element">
+                    <div class="element_header">
+                        <img src="./img/10_menu_elements/coin.png" alt="coin">
+                        <h3>Münze</h3>
+                    </div>
 
-                        <p>
-                            Diese Münzen gehörten einst mutigen Abenteurern wie Pepe, die versuchten, die Wüste von Señora Gallina und ihrer
-                            Hühnerarmee zu befreien. Viele von ihnen sind gescheitert und ließen ihre Spuren im Sand zurück. Sammle die Münzen
-                            ein, um ihren Mut zu ehren und dich Schritt für Schritt auf die bevorstehende Herausforderung vorzubereiten.
-                        </p>
-                    </li>
-                </ul>
-            </section>
+                    <p>
+                        Diese Münzen gehörten einst mutigen Abenteurern wie Pepe, die versuchten, die Wüste von Señora Gallina und ihrer
+                        Hühnerarmee zu befreien. Viele von ihnen sind gescheitert und ließen ihre Spuren im Sand zurück. Sammle die Münzen
+                        ein, um ihren Mut zu ehren und dich Schritt für Schritt auf die bevorstehende Herausforderung vorzubereiten.
+                    </p>
+                </li>
+            </ul>
+        </section>
 
-            <section>
-                <h2>
-                    Spielsteuerung
-                </h2>
+        <section>
+            <h2>
+                Spielsteuerung
+            </h2>
 
-                <p>
-                    Du kannst unseren Helden ganz einfach über die Tastatur steuern.
-                </p>
+            <p>
+                Du kannst unseren Helden ganz einfach über die Tastatur steuern.
+            </p>
 
-                <ul>
-                    <li><b>W-Taste</b> - springen</li>
-                    <li><b>A-Taste</b> - nach links laufen</li>
-                    <li><b>D-Taste</b> - nach rechts laufen</li>
-                    <li><b>Leertaste</b> - Salsaflasche werfen</li>
-                </ul>
-            </section>
-        <!-- </div> -->
+            <ul>
+                <li><b>W-Taste</b> - springen</li>
+                <li><b>A-Taste</b> - nach links laufen</li>
+                <li><b>D-Taste</b> - nach rechts laufen</li>
+                <li><b>Leertaste</b> - Salsaflasche werfen</li>
+            </ul>
+        </section>
+    </dialog>
+
+    <dialog class="imprint" id="imprint" onclick="closeDialogOnOutsideClick(event)">
+        <h1>Impressum</h1> 
+            <h3>Angaben gemäß § 5 DDG</h3>
+
+            <p>
+                Evgenij Liske<br> 
+                Mooswiesenstraße 11a<br> 
+                81245 München <br> 
+            </p>
+
+            <p>
+                <h3>Vertreten durch:</h3>
+                Evgenij Liske<br>
+            </p>
+
+            <p>
+                <h3>Kontakt:</h3>
+                Telefon: 017663452473<br>
+                E-Mail: <a>eugen.liske@yahoo.de</a></br>
+            </p>
+
+            <p>
+                <h3>Verbraucherstreitbeilegung / Universalschlichtungsstelle</h3>
+                Wir nehmen nicht an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teil und sind dazu
+                auch nicht verpflichtet.
+            </p> 
+
+            <p>Impressum erstellt mit kostenlosem Impressum-Generator von
+                <a target="_blank" href="https://impressum-generator.de/" rel="dofollow">impressum-generator.com</a>.
+            </p>
     </dialog>
 </div>    
 </body>
