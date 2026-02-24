@@ -22,6 +22,9 @@ canvas {
         0 0px 90px rgba(0,0,0,0.95),
         0 0 30px rgba(0,0,0,0.6),
         0 0 12px rgba(0,0,0,0.4);
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 .main_content_wrapper {
@@ -30,4 +33,111 @@ canvas {
     align-items: center;
     justify-content: center;
     height: 100vh;
+}
+
+.canvas_wrapper {
+    position: relative;
+    width: min(90vw, 720px);  /* ✅ dynamisch */
+    aspect-ratio: 3 / 2;      /* ✅ Höhe wird automatisch passend berechnet */
+    z-index: 0;
+}
+
+.start_screen {
+    position: absolute;
+    inset: 0;      /* ✅ statt top/left/width/height */
+    z-index: 1;
+}
+
+.start_screen img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    object-position: 56% center;
+}
+
+/* .start_game_button {
+    all: unset;         
+    display: block;     
+    cursor: pointer;     
+
+    width: 240px;
+    height: 50px;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid black;
+    background-image: url(/img/10_menu_elements/Glowing\ embers\ on\ burnt\ wood.png);
+    background-size: 120px;
+    background-repeat: repeat;
+    background-position: center;
+
+    font-family: 'Sancreek';
+    font-size: 32px;
+    color: rgb(255,215,0);
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+    transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+    letter-spacing: 0.5px;
+
+    position: absolute;
+    bottom: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.start_game_button:hover {
+    transform: translateX(-50%) scale(1.08);
+    box-shadow: 0 0 20px rgb(255,215,0);
+} */
+
+.start_game_button {
+    all: unset;
+    position: absolute;
+
+    left: 50%;
+    transform: translateX(-50%);   /* wichtig fürs Zentrieren */
+    bottom: 2%;                     /* ⭐ NEW – Abstand relativ zum Canvas */
+
+    width: min(60%, 320px);        /* ⭐ NEW – responsive Breite */
+    height: clamp(56px, 10%, 90px);/* ⭐ NEW – responsive Höhe */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-image: url(/img/10_menu_elements/burnt_wood.png);
+    background-size: cover;
+    background-position: center;
+
+    border-radius: 999px;          /* Ellipse */
+
+    font-size: clamp(24px, 4vw, 36px);
+    font-family: 'Sancreek';
+    color: rgb(255,215,0);
+
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+
+    letter-spacing: 0.5px;
+
+    box-shadow: 0px 0px 10px rgb(0, 0, 0);
+
+    cursor: pointer;
+    z-index: 2;
+
+    transition: transform 0.25s ease-in-out,
+                box-shadow 0.25s ease-in-out;
+}
+
+/* Hover – translateX MUSS erhalten bleiben */
+.start_game_button:hover {
+    transform: translateX(-50%) scale(1.08);  /* ⭐ NEW – kombiniert */
+    box-shadow: 0 0 20px rgb(255,215,0);
 }

@@ -11,13 +11,22 @@
 <body onload="init()">
 <div class="main_content_wrapper">
 
-    <canvas id="canvas" width="720" height="480">
-    </canvas>
+    <div class="canvas_wrapper">
+        <canvas id="canvas" width="720" height="480"></canvas>
+
+        <div id="startScreen" class="start_screen">
+            <img src="./img/9_intro_outro_screens/start/startscreen_1.png" alt="Startscreen">
+        </div>
+
+        <button id="startGameButton" onclick="startGame()" class="start_game_button">
+            Spiel starten
+        </button>
+    </div>
 
     <div class="button_container">
         <div class="menu_button" onclick="openDialog('gameInformation')">Spielinfo</div>
         <div class="menu_button" onclick="openDialog('imprint')">Impressum</div>
-        <div class="menu_button">Referenzen</div>
+        <div class="menu_button" onclick="openDialog('references')">Referenzen</div>
     </div>
 
     <dialog id="gameInformation" onclick="closeDialogOnOutsideClick(event)">
@@ -30,7 +39,7 @@
 
         <section>
             <h2>
-                    Spielbeschreibung
+                Spielbeschreibung
             </h2>
             <p>
                 In El Pollo Loco steuerst du Pepe durch eine lebendige Wüstenlandschaft, in der Señora Gallina und ihre Hühner die Gegend
@@ -143,7 +152,12 @@
     </dialog>
 
     <dialog class="imprint" id="imprint" onclick="closeDialogOnOutsideClick(event)">
-        <h1>Impressum</h1> 
+        <header class="dialog_header">
+            <h1>
+                Impressum
+            </h1>
+            <img onclick="closeDialog('imprint')" class="close_button" src="./img/10_menu_elements/close_button.png" alt="close_button">
+        </header>
             <h3>Angaben gemäß § 5 DDG</h3>
 
             <p>
@@ -169,9 +183,21 @@
                 auch nicht verpflichtet.
             </p> 
 
-            <p>Impressum erstellt mit kostenlosem Impressum-Generator von
+            <p>Impressum erstellt mit kostenlosem Impressum-Generator auf
                 <a target="_blank" href="https://impressum-generator.de/" rel="dofollow">impressum-generator.com</a>.
             </p>
+    </dialog>
+    <dialog id="references" onclick="closeDialogOnOutsideClick(event)">
+        <header class="dialog_header">
+            <h1>
+                Referenzen
+            </h1>
+            <img onclick="closeDialog('references')" class="close_button" src="./img/10_menu_elements/close_button.png" alt="close_button">
+        </header>
+
+        <h2>Bilder & Icons</h2>
+
+        <h2>Musik & Sounds</h2>
     </dialog>
 </div>    
 </body>

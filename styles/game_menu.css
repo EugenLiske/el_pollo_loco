@@ -4,12 +4,14 @@
     gap: 16px;
     margin-top: 32px;
     width: 100%;
+    position: relative;
+    z-index: 50;
 }
 
 .menu_button {
     height: 64px;
     width: 224px;
-    background-image: url(/img/5_background/flat-design-wood-texture-illustration/6662364.jpg);
+    background-image: url(/img/10_menu_elements/wood_background.jpg);
     background-size: cover;
     background-position: center;
     border-radius: 10px;
@@ -34,7 +36,7 @@
 }
 
 dialog {
-    background-image: url(/img/5_background/flat-design-wood-texture-illustration/6662364.jpg);
+    background-image: url(/img/10_menu_elements/wood_background.jpg);
     border: 5px solid rgb(102, 31, 0);
     border-radius: 10px;
     position: fixed;
@@ -124,10 +126,6 @@ p {
     align-items: center;
 }
 
-.position_support_container {
-    width: 64px;
-}
-
 .close_button {
     position: absolute;
     right: 0;
@@ -173,6 +171,8 @@ p {
 
 .imprint a {
     color: black;
+    outline: none;
+    box-shadow: none;
 }
 
 .imprint a:hover {
