@@ -56,54 +56,17 @@ canvas {
     object-position: 56% center;
 }
 
-/* .start_game_button {
-    all: unset;         
-    display: block;     
-    cursor: pointer;     
-
-    width: 240px;
-    height: 50px;
-    text-align: center;
-    border-radius: 10px;
-    border: 1px solid black;
-    background-image: url(/img/10_menu_elements/Glowing\ embers\ on\ burnt\ wood.png);
-    background-size: 120px;
-    background-repeat: repeat;
-    background-position: center;
-
-    font-family: 'Sancreek';
-    font-size: 32px;
-    color: rgb(255,215,0);
-    text-shadow:
-        -1px -1px 0 black,
-         1px -1px 0 black,
-        -1px  1px 0 black,
-         1px  1px 0 black;
-    transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
-    letter-spacing: 0.5px;
-
-    position: absolute;
-    bottom: 7px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-}
-
-.start_game_button:hover {
-    transform: translateX(-50%) scale(1.08);
-    box-shadow: 0 0 20px rgb(255,215,0);
-} */
 
 .start_game_button {
     all: unset;
     position: absolute;
 
     left: 50%;
-    transform: translateX(-50%);   /* wichtig fürs Zentrieren */
-    bottom: 2%;                     /* ⭐ NEW – Abstand relativ zum Canvas */
+    transform: translateX(-50%); 
+    bottom: 2%;                     
 
-    width: min(60%, 320px);        /* ⭐ NEW – responsive Breite */
-    height: clamp(56px, 10%, 90px);/* ⭐ NEW – responsive Höhe */
+    width: min(60%, 320px);       
+    height: clamp(56px, 10%, 90px);
 
     display: flex;
     align-items: center;
@@ -113,7 +76,7 @@ canvas {
     background-size: cover;
     background-position: center;
 
-    border-radius: 999px;          /* Ellipse */
+    border-radius: 999px;
 
     font-size: clamp(24px, 4vw, 36px);
     font-family: 'Sancreek';
@@ -140,4 +103,8 @@ canvas {
 .start_game_button:hover {
     transform: translateX(-50%) scale(1.08);  /* ⭐ NEW – kombiniert */
     box-shadow: 0 0 20px rgb(255,215,0);
+}
+
+.hidden {
+    display: none;
 }

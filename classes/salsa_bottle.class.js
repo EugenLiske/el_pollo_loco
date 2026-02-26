@@ -33,7 +33,7 @@ class SalsaBottle extends MovableObject {
         let positionOk = false;
 
         while (!positionOk && tries < maxTries) {
-            this.x = 300 + Math.random() * 4700;
+            this.x = 300 + Math.random() * 4500;
             this.y = 360 + Math.random() * 10;
 
             positionOk = true;

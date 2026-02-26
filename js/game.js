@@ -4,10 +4,12 @@ let keyboard = new Keyboard();
 
 function init(){
     canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
-    
+}
 
-    console.log('My character is', world.character); 
+function startGame(){
+    initLevel();
+    world = new World(canvas, keyboard);
+    document.getElementById('startScreen').classList.add('hidden');
 }
 
 window.addEventListener("keydown", (event) => {    
@@ -73,7 +75,6 @@ function openDialog(menuReference){
 function closeDialog(menuReference){
     let dialogRef = document.getElementById(menuReference);
     dialogRef.close();
-    document.getElementById('startScreen').style.display = 'none';
 }
 
 function closeDialogOnOutsideClick(event) {
@@ -89,9 +90,4 @@ function closeDialogOnOutsideClick(event) {
     if (clickedOutside) {
         dialog.close();
     }
-}
-
-function startGame(){
-    document.getElementById('startScreen').style.display = 'none';
-    document.getElementById('startGameButton').style.display = 'none';
 }
