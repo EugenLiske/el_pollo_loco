@@ -7,6 +7,11 @@ function init(){
 }
 
 function startGame(){
+    let buttons = document.querySelectorAll('.is_disabled');
+    buttons.forEach(button => {
+        button.classList.remove('is_disabled');
+    });
+
     initLevel();
     world = new World(canvas, keyboard);
     document.getElementById('startScreen').classList.add('hidden');

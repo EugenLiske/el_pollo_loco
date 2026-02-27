@@ -108,3 +108,36 @@ canvas {
 .hidden {
     display: none;
 }
+
+.ingame_buttons_wrapper {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 3%;
+    z-index: 3;
+    display: flex;
+    gap: 32px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgb(0, 0, 0);
+    padding: 8px 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.canvas_wrapper:hover .ingame_buttons_wrapper {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.ingame_button {
+    height: 28px;
+    width: 28px;
+    cursor: pointer;
+}
+
+.is_disabled {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+}
