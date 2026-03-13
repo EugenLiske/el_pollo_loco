@@ -8,6 +8,7 @@ class World {
 
     animationFrameID;
     isGameRunning = true;
+    gameEnded = false;
 
     statusBar = new StatusBar(20, -5, 'health');
     statusBarCoins = new StatusBar(20, 35, 'coins');
@@ -44,6 +45,8 @@ class World {
         startIntervalAndSaveID(() => {
             this.checkCollisions();
             this.checkThrowObjects();
+            this.checkIfPepeisDead();
+            this.checkIfEndbossIsDead();
         }, 1000 / 25);
     }
 
@@ -55,15 +58,58 @@ class World {
 
 
     checkCollisions(){
+        if (this.gameEnded) {
+            return;
+        }
+
         this.checkCoinCollection();
         this.checkBottleCollection();
-        this.checkRegularEnemyCollision();
+        this.checkEnemyCollision();
         this.checkBottleWithBottomCollision();
         this.checkBottleWithEnemyCollision();
     }
 
+    checkIfPepeisDead() {
+        if (this.gameEnded) {
+            return;
+        }
+
+        if (this.character.isDead()) {
+            this.gameEnded = true;
+
+            let losingScreen = document.querySelector('.losing_screen');
+            losingScreen.classList.remove('hidden');
+        }
+    }
+
+    checkIfEndbossIsDead() {
+        if (this.gameEnded) {
+            return;
+        }
+        for (let i = this.level.enemies.length - 1; i >= 0; i--) {
+            const enemy = this.level.enemies[i];
+
+            if(enemy instanceof Endboss && enemy.isDead()) {
+                 this.gameEnded = true; // NEW
+
+                let winningScreen = document.querySelector('.winning_screen');
+                winningScreen.classList.remove('hidden');
+
+                setTimeout(() => {
+                    stopGame();
+                }, 1000);
+
+                return;
+            }
+        }    
+    }
+
 
     checkThrowObjects() {
+        if (this.gameEnded) { 
+            return;
+        } 
+
         const COOLDOWN_MS = 500;
         const now = Date.now();
 
@@ -130,7 +176,7 @@ class World {
     }
 
 
-    checkRegularEnemyCollision(){
+    checkEnemyCollision(){
         for (let i = this.level.enemies.length - 1; i >= 0; i--) {
             const enemy = this.level.enemies[i];
 

@@ -45,6 +45,12 @@ function startGame(){
 function goBackToMainMenu(){
     stopGame();
 
+    let losingScreen = document.querySelector('.losing_screen');
+    losingScreen.classList.add('hidden');
+
+    let winningScreen = document.querySelector('.winning_screen');
+    winningScreen.classList.add('hidden');
+
     let dialogButtonContainer = document.querySelector('.button_container');
     dialogButtonContainer.classList.remove('invisible');
 
@@ -58,6 +64,10 @@ function goBackToMainMenu(){
 
 function restartGame(){
     stopGame();
+    let losingScreen = document.querySelector('.losing_screen');
+    losingScreen.classList.add('hidden');
+    let winningScreen = document.querySelector('.winning_screen');
+    winningScreen.classList.add('hidden');
     initLevel();
     world = new World(canvas, keyboard);
 }

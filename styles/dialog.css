@@ -28,6 +28,7 @@
          1px  1px 0 black;
     transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
     letter-spacing: 0.5px;
+    cursor: pointer;
 }
 
 .menu_button:hover {
