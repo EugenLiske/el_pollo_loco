@@ -88,7 +88,7 @@ class Character extends MovableObject {
     }
 
     animate(){
-        setInterval(() => {
+        startIntervalAndSaveID(() => {
             if (this.isDead()) {
                 return;
             }
@@ -110,7 +110,7 @@ class Character extends MovableObject {
             this.world.camera_x = -this.x + 150;
         }, 1000 / 60)
 
-        setInterval(() => {
+        startIntervalAndSaveID(() => {
             if (this.isDead()) {
                 this.setAnimation('dead', this.IMAGES_DEAD, false);
                 this.idleToSleepCounter = 0;

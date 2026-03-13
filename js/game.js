@@ -3,28 +3,36 @@ let world;
 let keyboard = new Keyboard();
 let intervalIDs = [];
 
+
+function init(){
+    canvas = document.getElementById('canvas');
+}
+
+
 function startIntervalAndSaveID(fn, time){
     let intervalID = setInterval(fn, time);
     intervalIDs.push(intervalID);
 }
+
 
 function stopGame(){
     intervalIDs.forEach(singleInterval => {
         clearInterval(singleInterval)
     });
     intervalIDs = [];
+
+    if (world) {
+        world.stopDrawing();
+    }
 }
 
-function init(){
-    canvas = document.getElementById('canvas');
-}
 
 function startGame(){
     let dialogButtonContainer = document.querySelector('.button_container');
     dialogButtonContainer.classList.add('invisible');
  
 
-    let ingameButtons = document.querySelectorAll('.is_disabled');
+    let ingameButtons = document.querySelectorAll('#home_button, #replay_button');
     ingameButtons.forEach(button => {
         button.classList.remove('is_disabled');
     });
@@ -33,6 +41,53 @@ function startGame(){
     world = new World(canvas, keyboard);
     document.getElementById('startScreen').classList.add('hidden');
 }
+
+function goBackToMainMenu(){
+    stopGame();
+
+    let dialogButtonContainer = document.querySelector('.button_container');
+    dialogButtonContainer.classList.remove('invisible');
+
+    let ingameButtons = document.querySelectorAll('#home_button, #replay_button');
+    ingameButtons.forEach(button => {
+        button.classList.add('is_disabled');
+    });
+
+    document.getElementById('startScreen').classList.remove('hidden');
+}
+
+function restartGame(){
+    stopGame();
+    initLevel();
+    world = new World(canvas, keyboard);
+}
+
+
+function openDialog(menuReference){
+    let dialogRef = document.getElementById(menuReference);
+    dialogRef.showModal();
+}
+
+function closeDialog(menuReference){
+    let dialogRef = document.getElementById(menuReference);
+    dialogRef.close();
+}
+
+function closeDialogOnOutsideClick(event) {
+    const dialog = event.currentTarget;
+    const rect = dialog.getBoundingClientRect();
+
+    const clickedOutside =
+        event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom;
+
+    if (clickedOutside) {
+        dialog.close();
+    }
+}
+
 
 window.addEventListener("keydown", (event) => {    
     if(event.key === "ArrowUp"){
@@ -88,28 +143,3 @@ window.addEventListener("keyup", (event) => {
         keyboard.D = false;
     }
 });
-
-function openDialog(menuReference){
-    let dialogRef = document.getElementById(menuReference);
-    dialogRef.showModal();
-}
-
-function closeDialog(menuReference){
-    let dialogRef = document.getElementById(menuReference);
-    dialogRef.close();
-}
-
-function closeDialogOnOutsideClick(event) {
-    const dialog = event.currentTarget;
-    const rect = dialog.getBoundingClientRect();
-
-    const clickedOutside =
-        event.clientX < rect.left ||
-        event.clientX > rect.right ||
-        event.clientY < rect.top ||
-        event.clientY > rect.bottom;
-
-    if (clickedOutside) {
-        dialog.close();
-    }
-}

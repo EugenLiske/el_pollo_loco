@@ -5,10 +5,15 @@ class World {
     canvas;
     keyboard;
     camera_x = 0;
+
+    animationFrameID;
+    isGameRunning = true;
+
     statusBar = new StatusBar(20, -5, 'health');
     statusBarCoins = new StatusBar(20, 35, 'coins');
     statusBarBottles = new StatusBar(20, 75, 'bottles');
     statusBarEndbossHealth = new StatusBar(550, 0, 'endbossHealth');
+
     throwableObjects = [];
     lastThrowTime = 0;
 
@@ -17,6 +22,7 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+
         this.drawCanvas();
         this.setWorld();
         this.runGameLogic();
@@ -35,10 +41,16 @@ class World {
 
 
     runGameLogic(){
-        setInterval(() => {
+        startIntervalAndSaveID(() => {
             this.checkCollisions();
             this.checkThrowObjects();
         }, 1000 / 25);
+    }
+
+
+    stopDrawing(){
+        this.isGameRunning = false;
+        cancelAnimationFrame(this.animationFrameID);
     }
 
 
@@ -146,7 +158,6 @@ class World {
                 } else {
                     this.character.hitByEnemy();
                     this.statusBar.setPercentage(this.character.energy);
-                    
                 }
             }
         }
@@ -233,6 +244,10 @@ class World {
 
 
     drawCanvas(){
+        if (!this.isGameRunning) {
+            return;
+        }
+
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.ctx.translate(this.camera_x, 0);
@@ -257,10 +272,7 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0);
 
-        let self = this;
-        requestAnimationFrame(function(){
-            self.drawCanvas();
-        });
+        this.animationFrameID = requestAnimationFrame(() => this.drawCanvas());
     }
 
 

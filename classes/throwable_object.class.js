@@ -55,7 +55,7 @@ class ThrowableObject extends MovableObject {
     throw(){
         this.speedY = 15;
         this.applyGravity();
-        setInterval(() => {
+        startIntervalAndSaveID(() => {
             if(this.isBroken) {
                 return;
             }
@@ -69,7 +69,7 @@ class ThrowableObject extends MovableObject {
     }
 
     animate(){
-        setInterval(() => {
+        startIntervalAndSaveID(() => {
             if (this.isBroken) {
                 this.setAnimation('splash', this.IMAGES_BOTTLE_SPLASH, false);
             } else {

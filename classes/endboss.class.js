@@ -151,7 +151,7 @@ class Endboss extends MovableObject {
         const ANIMATION_INTERVAL_MS = 100;
 
         // 1) Bewegung (smooth)
-        setInterval(() => {
+        startIntervalAndSaveID(() => {
             if (!this.world || !this.world.character) {
                 return;
             }
@@ -218,7 +218,7 @@ class Endboss extends MovableObject {
         }, 1000 / 60);
 
         // 2) Animation (Frames wechseln)
-        setInterval(() => {
+        startIntervalAndSaveID(() => {
             if (!this.world || !this.world.character) {
                 return;
             }
