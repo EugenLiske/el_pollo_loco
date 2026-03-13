@@ -15,18 +15,6 @@ body {
     font-family: 'Rancho';
 }
 
-canvas {
-    background-color: black;
-    border-radius: 10px;
-    box-shadow:
-        0 0px 90px rgba(0,0,0,0.95),
-        0 0 30px rgba(0,0,0,0.6),
-        0 0 12px rgba(0,0,0,0.4);
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
 .main_content_wrapper {
     display: flex;
     flex-direction: column;
@@ -42,6 +30,45 @@ canvas {
     z-index: 0;
 }
 
+canvas {
+    background-color: black;
+    border-radius: 10px;
+    box-shadow:
+        0 0px 90px rgba(0,0,0,0.95),
+        0 0 30px rgba(0,0,0,0.6),
+        0 0 12px rgba(0,0,0,0.4);
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.ingame_buttons_wrapper {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 3%;
+    z-index: 3;
+    display: flex;
+    gap: 32px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgb(0, 0, 0);
+    padding: 8px 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.ingame_button {
+    height: 28px;
+    width: 28px;
+    cursor: pointer;
+}
+
+.canvas_wrapper:hover .ingame_buttons_wrapper {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 .start_screen {
     position: absolute;
     inset: 0;      /* ✅ statt top/left/width/height */
@@ -55,7 +82,6 @@ canvas {
     object-fit: cover;
     object-position: 56% center;
 }
-
 
 .start_game_button {
     all: unset;
@@ -105,39 +131,16 @@ canvas {
     box-shadow: 0 0 20px rgb(255,215,0);
 }
 
-.hidden {
-    display: none;
-}
-
-.ingame_buttons_wrapper {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 3%;
-    z-index: 3;
-    display: flex;
-    gap: 32px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgb(0, 0, 0);
-    padding: 8px 16px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease-in-out;
-}
-
-.canvas_wrapper:hover .ingame_buttons_wrapper {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.ingame_button {
-    height: 28px;
-    width: 28px;
-    cursor: pointer;
-}
-
 .is_disabled {
     opacity: 0.35;
     cursor: default;
     pointer-events: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.invisible {
+    visibility: hidden;
 }

@@ -1,14 +1,31 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let intervalIDs = [];
+
+function startIntervalAndSaveID(fn, time){
+    let intervalID = setInterval(fn, time);
+    intervalIDs.push(intervalID);
+}
+
+function stopGame(){
+    intervalIDs.forEach(singleInterval => {
+        clearInterval(singleInterval)
+    });
+    intervalIDs = [];
+}
 
 function init(){
     canvas = document.getElementById('canvas');
 }
 
 function startGame(){
-    let buttons = document.querySelectorAll('.is_disabled');
-    buttons.forEach(button => {
+    let dialogButtonContainer = document.querySelector('.button_container');
+    dialogButtonContainer.classList.add('invisible');
+ 
+
+    let ingameButtons = document.querySelectorAll('.is_disabled');
+    ingameButtons.forEach(button => {
         button.classList.remove('is_disabled');
     });
 

@@ -42,6 +42,15 @@ class World {
     }
 
 
+    checkCollisions(){
+        this.checkCoinCollection();
+        this.checkBottleCollection();
+        this.checkRegularEnemyCollision();
+        this.checkBottleWithBottomCollision();
+        this.checkBottleWithEnemyCollision();
+    }
+
+
     checkThrowObjects() {
         const COOLDOWN_MS = 500;
         const now = Date.now();
@@ -63,15 +72,6 @@ class World {
             this.character.collectedBottles--;
             this.lastThrowTime = now;
         }
-    }
-
-    
-    checkCollisions(){
-        this.checkCoinCollection();
-        this.checkBottleCollection();
-        this.checkRegularEnemyCollision();
-        this.checkBottleWithBottomCollision();
-        this.checkBottleWithEnemyCollision();
     }
 
 
