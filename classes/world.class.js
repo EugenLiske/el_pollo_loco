@@ -69,9 +69,12 @@ class World {
     checkIfPepeisDead() {
         if (this.character.isDead()) {
             this.gameEnded = true;
+            AudioManager.playLose();
 
             let losingScreen = document.querySelector('.losing_screen');
-            losingScreen.classList.remove('hidden');
+            setTimeout(() => {
+                losingScreen.classList.remove('hidden');
+            }, 700);   
         }
     }
 
@@ -81,6 +84,7 @@ class World {
 
             if(enemy instanceof Endboss && enemy.isDead()) {
                 this.gameEnded = true;
+                AudioManager.playWin();
 
                 let winningScreen = document.querySelector('.winning_screen');
                 winningScreen.classList.remove('hidden');

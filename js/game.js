@@ -2,6 +2,7 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let intervalIDs = [];
+let audioStarted = false;
 
 
 function init(){
@@ -28,6 +29,7 @@ function stopGame(){
 
 
 function startGame(){
+    AudioManager.playGame();
     let dialogButtonContainer = document.querySelector('.button_container');
     dialogButtonContainer.classList.add('invisible');
  
@@ -42,8 +44,22 @@ function startGame(){
     document.getElementById('startScreen').classList.add('hidden');
 }
 
+
+function toggleSounds(){
+    AudioManager.toggleMute();
+    const soundButton = document.getElementById("sound_button");
+
+    if (AudioManager.isMuted) {
+        soundButton.src = "img/10_menu_elements/mute_button.png";
+    } else {
+        soundButton.src = "img/10_menu_elements/sound_button.png";
+    }
+}
+
+
 function goBackToMainMenu(){
     stopGame();
+    AudioManager.playMenu();
 
     let losingScreen = document.querySelector('.losing_screen');
     losingScreen.classList.add('hidden');
@@ -64,6 +80,7 @@ function goBackToMainMenu(){
 
 function restartGame(){
     stopGame();
+    AudioManager.playGame();
     let losingScreen = document.querySelector('.losing_screen');
     losingScreen.classList.add('hidden');
     let winningScreen = document.querySelector('.winning_screen');
@@ -102,7 +119,8 @@ function closeDialogOnOutsideClick(event) {
 window.addEventListener("keydown", (event) => {
     const key = event.key.toLowerCase();
 
-    if (world.gameEnded) return
+    if (!world) return;
+    if (world.gameEnded) return;
 
     if(key === "w"){
         keyboard.UP = true
@@ -143,3 +161,24 @@ window.addEventListener("keyup", (event) => {
         keyboard.SPACE = false
     }
 });
+
+window.addEventListener("keydown", startAudioOnce);
+window.addEventListener("click", startAudioOnce);
+
+function startAudioOnce(event) {
+    if (audioStarted) return;
+
+    const clickedStartButton = event?.target?.id === "startGameButton";
+    const clickedSoundButton = event?.target?.id === "sound_button";
+
+    if (clickedSoundButton) return;
+
+    audioStarted = true;
+    
+    if (!clickedStartButton) {
+        AudioManager.playMenu();
+    }
+
+    window.removeEventListener("keydown", startAudioOnce);
+    window.removeEventListener("click", startAudioOnce);
+}

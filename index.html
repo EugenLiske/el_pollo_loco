@@ -18,7 +18,7 @@
         <div class="ingame_buttons_wrapper">
             <img onclick="goBackToMainMenu()" id="home_button" class="ingame_button is_disabled" src="img/10_menu_elements/home_button.png" alt="home_button">
             <img onclick="restartGame()" id="replay_button" class="ingame_button is_disabled" src="img/10_menu_elements/replay_button.png" alt="replay_button">
-            <img id="sound_button" class="ingame_button" src="img/10_menu_elements/sound_button.png" alt="sound_button">
+            <img onclick="toggleSounds()" id="sound_button" class="ingame_button" src="img/10_menu_elements/sound_button.png" alt="sound_button">
         </div>
 
         <div id="startScreen" class="start_screen">
@@ -209,8 +209,17 @@
         <a href="https://www.flaticon.com/free-icons/home-button" title="home button icons">Home button icons created by Freepik - Flaticon</a><br>
         <a href="https://www.flaticon.com/free-icons/restart" title="restart icons">Restart icons created by Frey Wazza - Flaticon</a><br>
         <a href="https://www.flaticon.com/free-icons/speaker" title="speaker icons">Speaker icons created by Freepik - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-icons/mute" title="mute icons">Mute icons created by adrianadam - Flaticon</a>
+        <a href="https://www.flaticon.com/free-icons/mute" title="mute icons">Mute icons created by adrianadam - Flaticon</a><br>
+        <a href="https://www.flaticon.com/free-icons/mute" title="mute icons">Mute icons created by Google - Flaticon</a>
         <h2>Musik & Sounds</h2>
+        GAME-Music by <a href="https://pixabay.com/users/freegroove-20279938/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=113044">
+        Francesco Biondi</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=113044"><br>
+        MENU-Music by <a href="https://pixabay.com/users/positive_sound-54709444/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=491538">Positive_Sound</a>
+        from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=491538">Pixabay</a><br>
+        WIN-Music by <a href="https://pixabay.com/users/sonican-38947841/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=287447">
+        Dvir Silverstone</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=287447">Pixabay</a>
+        Pixabay</a><br>
+        LOSE-Music by <a href="https://pixabay.com/users/roybushband-30554739/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=149423">Roybushband</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=149423">Pixabay</a>
     </dialog>
 </div>    
 </body>
@@ -230,5 +239,6 @@
 <script src="classes/status_bar.class.js"></script>
 <script src="classes/throwable_object.class.js"></script>
 <script src="levels/level_1.js"></script>
+<script src="classes/audiomanager.class.js"></script>
 <script src="js/game.js"></script>
 </html>
