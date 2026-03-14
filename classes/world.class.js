@@ -43,10 +43,11 @@ class World {
 
     runGameLogic(){
         startIntervalAndSaveID(() => {
+            if (this.gameEnded) return;
             this.checkCollisions();
-            this.checkThrowObjects();
             this.checkIfPepeisDead();
             this.checkIfEndbossIsDead();
+            this.checkThrowObjects();
         }, 1000 / 25);
     }
 
@@ -58,10 +59,6 @@ class World {
 
 
     checkCollisions(){
-        if (this.gameEnded) {
-            return;
-        }
-
         this.checkCoinCollection();
         this.checkBottleCollection();
         this.checkEnemyCollision();
@@ -70,10 +67,6 @@ class World {
     }
 
     checkIfPepeisDead() {
-        if (this.gameEnded) {
-            return;
-        }
-
         if (this.character.isDead()) {
             this.gameEnded = true;
 
@@ -83,14 +76,11 @@ class World {
     }
 
     checkIfEndbossIsDead() {
-        if (this.gameEnded) {
-            return;
-        }
         for (let i = this.level.enemies.length - 1; i >= 0; i--) {
             const enemy = this.level.enemies[i];
 
             if(enemy instanceof Endboss && enemy.isDead()) {
-                 this.gameEnded = true; // NEW
+                this.gameEnded = true;
 
                 let winningScreen = document.querySelector('.winning_screen');
                 winningScreen.classList.remove('hidden');
@@ -106,15 +96,11 @@ class World {
 
 
     checkThrowObjects() {
-        if (this.gameEnded) { 
-            return;
-        } 
-
         const COOLDOWN_MS = 500;
         const now = Date.now();
 
         const canThrow =
-            this.keyboard.D &&
+            this.keyboard.SPACE &&
             // this.character.collectedBottles > 0 &&
             (now - this.lastThrowTime) >= COOLDOWN_MS;
 
