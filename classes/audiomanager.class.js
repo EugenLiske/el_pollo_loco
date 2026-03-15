@@ -1,9 +1,9 @@
 class AudioManager {
 
-    static menuMusic = new Audio('audio/menu_music.mp3');
-    static gameMusic = new Audio('audio/game_music.mp3');
-    static winMusic = new Audio('audio/win_music.mp3');
-    static loseMusic = new Audio('audio/lose_music.mp3');
+    static menuMusic = new Audio('audio/loops/menu_music.mp3');
+    static gameMusic = new Audio('audio/loops/game_music.mp3');
+    static winMusic = new Audio('audio/loops/win_music.mp3');
+    static loseMusic = new Audio('audio/loops/lose_music.mp3');
 
     static currentMusic = null;
     static isMuted = false;

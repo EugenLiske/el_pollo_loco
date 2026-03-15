@@ -74,7 +74,7 @@ class World {
             let losingScreen = document.querySelector('.losing_screen');
             setTimeout(() => {
                 losingScreen.classList.remove('hidden');
-            }, 700);   
+            }, 1000);   
         }
     }
 
@@ -105,10 +105,12 @@ class World {
 
         const canThrow =
             this.keyboard.SPACE &&
+            this.character.currentAnimation !== 'idleSleep' &&
             // this.character.collectedBottles > 0 &&
             (now - this.lastThrowTime) >= COOLDOWN_MS;
 
         if (canThrow) {
+            this.character.idleToSleepCounter = 0;
             const directionLeft = this.character.otherDirection;
 
             const spawnX = directionLeft ? this.character.x - 13 : this.character.x + 55;
@@ -116,6 +118,8 @@ class World {
 
             const bottle = new ThrowableObject(spawnX, spawnY, directionLeft);
             this.throwableObjects.push(bottle);
+
+            SfxManager.play(SfxManager.throwBottle);
 
             this.character.collectedBottles--;
             this.lastThrowTime = now;

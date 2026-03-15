@@ -47,6 +47,7 @@ function startGame(){
 
 function toggleSounds(){
     AudioManager.toggleMute();
+    SfxManager.syncMuteState();
     const soundButton = document.getElementById("sound_button");
 
     if (AudioManager.isMuted) {
