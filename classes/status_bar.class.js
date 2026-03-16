@@ -76,8 +76,7 @@ class StatusBar extends DrawableObject {
     }
 
     setCollectedCoinsPercentage(collectedCoinsPercentage){
-        // clamp auf max 100, falls percent irgendwann mal aus Versehen höher wird
-        this.collectedCoinsPercentage = Math.min(100, collectedCoinsPercentage);
+        this.collectedCoinsPercentage = collectedCoinsPercentage;
         let path = this.IMAGES_COINS_BAR[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }

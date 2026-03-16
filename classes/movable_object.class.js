@@ -8,6 +8,8 @@ class MovableObject extends DrawableObject {
     currentAnimation = null;
     collectedCoins = 0;
     collectedBottles = 0;
+    maxBottles = 20;
+    maxCoins = 50;
 
     offset = {
         top: 0,

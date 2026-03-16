@@ -122,6 +122,10 @@ class World {
             SfxManager.play(SfxManager.throwBottle);
 
             this.character.collectedBottles--;
+
+            let percent = (this.character.collectedBottles / this.character.maxBottles) * 100;
+            this.statusBarBottles.setCollectedBottlesPercentage(percent);
+
             this.lastThrowTime = now;
         }
     }
@@ -137,14 +141,14 @@ class World {
     }
 
     checkCoinCollection(){
-        const maxCoins = 50;
         for (let i = this.level.coins.length - 1; i >= 0; i--) {
             const coin = this.level.coins[i];
 
             if (this.character.isCollidingWithOffset(coin)) {
                 this.character.collectCoin();
+                SfxManager.play(SfxManager.collectCoin);
 
-                let percent = (this.character.collectedCoins / maxCoins) * 100;
+                let percent = (this.character.collectedCoins / this.character.maxCoins) * 100;
                 this.statusBarCoins.setCollectedCoinsPercentage(percent);
 
                 this.level.coins.splice(i, 1);
@@ -154,14 +158,14 @@ class World {
 
 
     checkBottleCollection(){
-        const maxBottles = 20;
         for (let i = this.level.bottles.length - 1; i >= 0; i--) {
             const bottle = this.level.bottles[i];
 
             if (this.character.isCollidingWithOffset(bottle)) {
                 this.character.collectBottle();
+                SfxManager.play(SfxManager.collectBottle);
 
-                let percent = (this.character.collectedBottles / maxBottles) * 100;
+                let percent = (this.character.collectedBottles / this.character.maxBottles) * 100;
                 this.statusBarBottles.setCollectedBottlesPercentage(percent);
 
                 this.level.bottles.splice(i, 1);
@@ -182,6 +186,15 @@ class World {
 
                 if (enemy instanceof Chicken && this.isCharacterStompingEnemy(enemy)) {
                     enemy.die();
+
+                    if (enemy instanceof MiniChicken) {
+                        SfxManager.play(SfxManager.smallChickenDead, 0.1);
+                        setTimeout(() => {
+                            SfxManager.stop(SfxManager.smallChickenDead);
+                        }, 750);
+                    } else if (enemy instanceof Chicken) {
+                        SfxManager.play(SfxManager.chickenDead, 0.1);
+                    }
 
                     this.character.speedY = 5;
 
@@ -212,6 +225,7 @@ class World {
             const bottleBottom = bottle.y + bottle.height - bottle.offset.bottom;
 
             if (!bottle.isBroken && bottleBottom >= GROUND_Y) {
+                SfxManager.play(SfxManager.bottleBreaks);
                 bottle.y = GROUND_Y - (bottle.height - bottle.offset.bottom);
                 bottle.isBroken = true;
                 bottle.speedY = 0;
@@ -265,6 +279,15 @@ class World {
 
                     if (enemy instanceof Chicken) {
                         enemy.die();
+                        SfxManager.play(SfxManager.bottleBreaks);
+                        if (enemy instanceof MiniChicken) {
+                            SfxManager.play(SfxManager.smallChickenDead, 0.1);
+                            setTimeout(() => {
+                                SfxManager.stop(SfxManager.smallChickenDead);
+                            }, 750);
+                        } else if (enemy instanceof Chicken) {
+                            SfxManager.play(SfxManager.chickenDead, 0.1);
+                        }
 
                         setTimeout(() => {
                         const index = this.level.enemies.indexOf(enemy);

@@ -70,6 +70,10 @@ class Endboss extends MovableObject {
     attackSpeed = 0;
     normalSpeed = 0;
 
+    wasDeadSoundPlayed = false;
+    wasHurtSoundPlayed = false;
+    wasAttackSoundPlayed = false;
+
     constructor() {
         super();
         this.loadImage(this.IMAGES_IDLE[0]);
@@ -130,13 +134,11 @@ class Endboss extends MovableObject {
             this.energy = 0;
             this.currentImageIndex = 0;
 
-            // ✅ NEW: Sofort alles stoppen / resetten, damit nichts mehr "weitergleitet"
-            this.isAttacking = false;          // Attack sofort beenden
-            this.speed = 0;                    // Bewegung sofort stoppen
-            this.alertTriggered = false;       // Alert-State zurücksetzen
+            this.isAttacking = false; 
+            this.speed = 0;                 
+            this.alertTriggered = false;  
 
-            // ✅ NEW: Death sofort anstoßen (damit nicht erst beim nächsten Interval sichtbar)
-            this.currentAnimation = 'idle';    // garantiert "Wechsel" auf dead
+            this.currentAnimation = 'idle'; 
             this.setAnimation('dead', this.IMAGES_DEAD, false);
         } else {
             this.lastHit = new Date().getTime();
@@ -144,48 +146,43 @@ class Endboss extends MovableObject {
     }
 
     animate() {
-        const WALK_DISTANCE = 600;
-        const ALERT_DISTANCE = 350;
+        const WALK_DISTANCE = 1500;
+        const ALERT_DISTANCE = 400;
 
         const ATTACK_DISTANCE = 600;
         const ANIMATION_INTERVAL_MS = 100;
 
-        // 1) Bewegung (smooth)
         startIntervalAndSaveID(() => {
             if (!this.world || !this.world.character) {
                 return;
             }
 
-            // ✅ NEW: Wenn tot → keinerlei Bewegung mehr
             if (this.isDead()) {
                 this.speed = 0;
                 return;
             }
 
-            // Während des Attacks: Richtung ist gelockt, nicht neu berechnen
             if (!this.isAttacking) {
                 this.updateMovementDirectionByCharacterPosition();
             } else {
-                // sorgt dafür, dass das Bild während des Attacks nicht plötzlich flippt
                 this.otherDirection = this.attackDirectionRight;
             }
 
             const distance = Math.abs(this.x - this.world.character.x);
 
-            // Aktivierung: einmalig
             if (!this.hasStartedWalking && distance <= WALK_DISTANCE) {
                 this.hasStartedWalking = true;
+                SfxManager.play(SfxManager.endbossStartsWalking);
             }
 
-            // ─────────────────────────────────────────────
-            // ATTACK: sprintet immer die vollen 600px (nicht abbrechbar)
-            // ─────────────────────────────────────────────
+
             if (this.isAttacking) {
                 const traveled = Math.abs(this.x - this.attackStartX);
 
                 if (traveled >= ATTACK_DISTANCE) {
                     this.isAttacking = false;
                     this.speed = this.normalSpeed;
+                    this.wasAttackSoundPlayed = false;
 
                     this.alertTriggered = false;
                     this.currentAnimation = 'idle';
@@ -202,12 +199,10 @@ class Endboss extends MovableObject {
                 return;
             }
 
-            // Im Alert-Bereich: stehen bleiben (Alert kann abbrechen, Attack startet später)
             if (distance < ALERT_DISTANCE) {
                 return;
             }
 
-            // Normal laufen
             if (this.hasStartedWalking) {
                 if (this.moveToRight) {
                     this.moveRight();
@@ -217,22 +212,27 @@ class Endboss extends MovableObject {
             }
         }, 1000 / 60);
 
-        // 2) Animation (Frames wechseln)
         startIntervalAndSaveID(() => {
             if (!this.world || !this.world.character) {
                 return;
             }
 
-            // ✅ NEW: Death hat höchste Priorität und läuft 1x durch (loop=false)
             if (this.isDead()) {
-                this.isAttacking = false;       // falls er während/kurz nach Attack stirbt
-                this.alertTriggered = false;    // saubere Zustände
+                if (!this.wasDeadSoundPlayed) {
+                    SfxManager.play(SfxManager.endbossDead);
+                    this.wasDeadSoundPlayed = true;
+                }
+                this.isAttacking = false;
+                this.alertTriggered = false;
                 this.setAnimation('dead', this.IMAGES_DEAD, false);
                 return;
             }
 
-            // Während des Attacks: Animation weiter ticken, sonst normale Richtungslogik
             if (this.isAttacking) {
+                if (!this.wasAttackSoundPlayed) {
+                    SfxManager.play(SfxManager.endbossAttacks);
+                    this.wasAttackSoundPlayed = true;
+                }
                 this.otherDirection = this.attackDirectionRight;
                 this.setAnimation('attack', this.IMAGES_ATTACK, false);
                 return;
@@ -242,22 +242,21 @@ class Endboss extends MovableObject {
 
             const distance = Math.abs(this.x - this.world.character.x);
 
-            if (!this.hasStartedWalking && distance <= WALK_DISTANCE) {
-                this.hasStartedWalking = true;
+            if (this.isHurt()) {
+                if (!this.wasHurtSoundPlayed) {
+                    SfxManager.play(SfxManager.bottleBreaks);
+                    SfxManager.play(SfxManager.endbossHurt);
+                    setTimeout(() => {
+                            SfxManager.stop(SfxManager.endbossHurt);
+                    }, 1000);
+                    this.wasHurtSoundPlayed = true;
+                } 
+                this.alertTriggered = false; 
+                this.setAnimation('hurt', this.IMAGES_HURT, true);
+                return;
             }
 
-            // ✅ NEW: HURT-Animation (nur außerhalb ATTACK)
-            // Priorität: HURT vor ALERT/WALK, damit Treffer sofort sichtbar wird.
-            // Wichtig: alertTriggered resetten, damit der Alert danach sauber wieder starten kann.
-            if (this.isHurt()) { // ✅ NEW
-                this.alertTriggered = false; // ✅ NEW
-                this.setAnimation('hurt', this.IMAGES_HURT, true); // ✅ NEW
-                return; // ✅ NEW
-            }
-
-            // ─────────────────────────────────────────────
-            // ALERT (< 300px): bis zum letzten Frame abbrechbar
-            // ─────────────────────────────────────────────
+            this.wasHurtSoundPlayed = false;
             if (distance < ALERT_DISTANCE) {
                 if (!this.alertTriggered) {
                     this.alertTriggered = true;
@@ -268,15 +267,10 @@ class Endboss extends MovableObject {
                 if (this.currentAnimation === 'alert') {
                     this.setAnimation('alert', this.IMAGES_ALERT, false);
 
-                    // ─────────────────────────────────────────────
-                    // NEU: Wenn letzter Alert-Frame erreicht → Attack starten (nicht abbrechbar)
-                    // ─────────────────────────────────────────────
                     if (this.currentImageIndex >= this.IMAGES_ALERT.length - 1) {
-                        // Richtung beim Start des Attacks fixieren (in Richtung Character)
                         this.attackDirectionRight = this.moveToRight;
                         this.otherDirection = this.attackDirectionRight;
 
-                        // Attack-Speed so berechnen, dass wir in etwa mit der Attack-Animation 600px schaffen
                         this.normalSpeed = this.speed;
                         const durationSeconds = (this.IMAGES_ATTACK.length * ANIMATION_INTERVAL_MS) / 1000;
                         this.attackSpeed = ATTACK_DISTANCE / (durationSeconds * 60);
@@ -284,18 +278,15 @@ class Endboss extends MovableObject {
                         this.attackStartX = this.x;
                         this.isAttacking = true;
 
-                        // Attack-Animation sauber bei Frame 0 starten
                         this.currentAnimation = 'idle';
                         this.setAnimation('attack', this.IMAGES_ATTACK, false);
                     }
                 }
                 return;
             }
-
-            // Außerhalb Alert: Reset (damit Alert beim nächsten Unterschreiten wieder neu starten kann)
+            
             this.alertTriggered = false;
 
-            // Idle vor Aktivierung
             if (!this.hasStartedWalking) {
                 if (this.currentAnimation !== 'idle') {
                     this.setAnimation('idle', this.IMAGES_IDLE, false);
@@ -303,7 +294,6 @@ class Endboss extends MovableObject {
                 return;
             }
 
-            // Walk im Normalbetrieb
             this.setAnimation('walk', this.IMAGES_WALKING, true);
         }, ANIMATION_INTERVAL_MS);
     }

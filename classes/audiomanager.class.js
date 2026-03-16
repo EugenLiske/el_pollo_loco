@@ -8,6 +8,13 @@ class AudioManager {
     static currentMusic = null;
     static isMuted = false;
 
+    static {
+        this.gameMusic.volume = 0.5;
+        this.menuMusic.volume = 0.5;
+        this.winMusic.volume = 0.5;
+        this.loseMusic.volume = 0.5;
+    }
+
 
     static async playMusic(music) {
         if (this.currentMusic) {
