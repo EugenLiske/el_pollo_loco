@@ -70,7 +70,6 @@ class Character extends MovableObject {
     isSleepSoundPlaying = false;
     wasDeadSoundPlayed = false;
     wasHurtSoundPlayed = false;
-    wasJumpSoundPlayed = false;
 
     constructor(){
         super();
@@ -143,16 +142,6 @@ class Character extends MovableObject {
                 this.idleToSleepCounter = 0;
 
             } else if (this.isAboveGround()) {
-                // if (!this.wasJumpSoundPlayed) {
-                //     SfxManager.play(SfxManager.jump);
-                //     this.wasJumpSoundPlayed = true;
-                // }
-
-                // SfxManager.stop(SfxManager.walk);
-                // this.isWalkingSoundPlaying = false;
-
-                // SfxManager.stop(SfxManager.sleep);
-
                 this.setAnimation('jump', this.IMAGES_JUMPING);
                 this.idleToSleepCounter = 0;
 
@@ -163,13 +152,11 @@ class Character extends MovableObject {
                 }
                 SfxManager.stop(SfxManager.sleep);
 
-                this.wasJumpSoundPlayed = false;
                 this.wasHurtSoundPlayed = false;
                 this.setAnimation('walk', this.IMAGES_WALKING);
                 this.idleToSleepCounter = 0;
 
             } else {
-                this.wasJumpSoundPlayed = false;
                 this.wasHurtSoundPlayed = false;
                 this.isWalkingSoundPlaying = false;
                 SfxManager.stop(SfxManager.walk);
