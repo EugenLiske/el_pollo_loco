@@ -284,7 +284,7 @@ class Endboss extends MovableObject {
                 }
                 return;
             }
-            
+
             this.alertTriggered = false;
 
             if (!this.hasStartedWalking) {

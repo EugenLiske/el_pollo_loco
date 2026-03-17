@@ -10,15 +10,16 @@
     <link rel="stylesheet" href="styles/dialog.css">
 </head>
 <body onload="init()">
-<div class="main_content_wrapper">
+<div class="main_content_wrapper" id="main_content_wrapper">
 
-    <div class="canvas_wrapper">
+    <div id="canvas_wrapper" class="canvas_wrapper">
         <canvas id="canvas" width="720" height="480"></canvas>
 
         <div class="ingame_buttons_wrapper">
             <img onclick="goBackToMainMenu()" id="home_button" class="ingame_button is_disabled" src="img/10_menu_elements/home_button.png" alt="home_button">
             <img onclick="restartGame()" id="replay_button" class="ingame_button is_disabled" src="img/10_menu_elements/replay_button.png" alt="replay_button">
             <img onclick="toggleSounds()" id="sound_button" class="ingame_button" src="img/10_menu_elements/sound_button.png" alt="sound_button">
+            <img onclick="toggleFullscreen()" id="change_screen_size_button" class="ingame_button" src="img/10_menu_elements/full_size.png" alt="change_screen_size_button">
         </div>
 
         <div id="startScreen" class="start_screen">
@@ -211,7 +212,9 @@
         <a href="https://www.flaticon.com/free-icons/restart" title="restart icons">Restart icons created by Frey Wazza - Flaticon</a><br>
         <a href="https://www.flaticon.com/free-icons/speaker" title="speaker icons">Speaker icons created by Freepik - Flaticon</a><br>
         <a href="https://www.flaticon.com/free-icons/mute" title="mute icons">Mute icons created by adrianadam - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-icons/mute" title="mute icons">Mute icons created by Google - Flaticon</a>
+        <a href="https://www.flaticon.com/free-icons/mute" title="mute icons">Mute icons created by Google - Flaticon</a><br>
+        <a href="https://www.flaticon.com/free-icons/expand" title="expand icons">Full Screen icons created by Freepik - Flaticon</a><br>
+        <a href="https://www.flaticon.com/free-icons/small" title="small icons">Small screen icons created by th studio - Flaticon</a>
         <h2>Musik & Sounds</h2>
         GAME-Music by <a href="https://pixabay.com/users/freegroove-20279938/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=113044">
         Francesco Biondi</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=113044"><br>
@@ -249,7 +252,9 @@
         COLLECT-BOTTLE-Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=5930">
         freesound_community</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=5930">Pixabay</a><br>
         BOTTLE-BREAK-Sound Effect by <a href="https://pixabay.com/users/universfield-28281460/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=351297">
-        Universfield</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=351297">Pixabay</a>
+        Universfield</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=351297">Pixabay</a><br>
+        DIALOG-BUTTON-Sound Effect by <a href="https://pixabay.com/users/dragon-studio-38165424/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=382713">
+        DRAGON-STUDIO</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=382713">Pixabay</a>
     </dialog>
 </div>    
 </body>

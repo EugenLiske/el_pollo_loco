@@ -59,6 +59,7 @@ function toggleSounds(){
 
 
 function goBackToMainMenu(){
+    SfxManager.stop(SfxManager.sleep);
     stopGame();
     AudioManager.playMenu();
 
@@ -183,3 +184,47 @@ function startAudioOnce(event) {
     window.removeEventListener("keydown", startAudioOnce);
     window.removeEventListener("click", startAudioOnce);
 }
+
+
+function toggleFullscreen() {
+    let gameArea = document.getElementById('canvas_wrapper');
+    let changeScreenSizeButton = document.getElementById('change_screen_size_button');
+
+    if (!document.fullscreenElement) {
+        openFullscreen(gameArea);
+    } else {
+        closeFullscreen();
+    }
+}
+
+/* View in fullscreen */
+function openFullscreen(element) {
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if (element.webkitRequestFullscreen) { /* Safari */
+    element.webkitRequestFullscreen();
+  } else if (element.msRequestFullscreen) { /* IE11 */
+    element.msRequestFullscreen();
+  }
+}
+
+/* Close fullscreen */
+function closeFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) { /* Safari */
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) { /* IE11 */
+    document.msExitFullscreen();
+  }
+}
+
+document.addEventListener("fullscreenchange", () => {
+    const button = document.getElementById('change_screen_size_button');
+
+    if (document.fullscreenElement) {
+        button.src = "img/10_menu_elements/normal_size.png";
+    } else {
+        button.src = "img/10_menu_elements/full_size.png";
+    }
+});
