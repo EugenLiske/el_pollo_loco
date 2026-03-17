@@ -216,3 +216,61 @@ canvas {
     transform: translateX(-50%) scale(0.75);
     transform-origin: top center;
 }
+
+
+.touch_controls_wrapper {
+    display: none;
+}
+
+.mobile .touch_controls_wrapper {
+    z-index: 1000;
+    position: fixed;
+    inset: auto 0 16px 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    padding: 0 16px;
+    pointer-events: none;
+}
+
+.mobile .touch_controls_left,
+.mobile .touch_controls_right {
+    display: flex;
+    gap: 12px;
+    pointer-events: auto;
+}
+
+.touch_button {
+    all: unset;
+    height: 72px;
+    width: 72px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    background-image: url("./img/10_menu_elements/wood_background.jpg");
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0px 0px 10px rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.touch_button img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+#touch-throw-button img {
+    width: 32px;
+    height: 32px;
+}
+
+#touch-jump-button img {
+    width: 34px;
+    height: 34px;
+}
