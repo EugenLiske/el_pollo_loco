@@ -91,9 +91,8 @@ canvas {
     left: 50%;
     transform: translateX(-50%); 
     bottom: 2%;                     
-
-    width: min(60%, 320px);       
-    height: clamp(56px, 10%, 90px);
+    width: 300px;
+    aspect-ratio: 6 / 1;
 
     display: flex;
     align-items: center;
@@ -105,7 +104,7 @@ canvas {
 
     border-radius: 999px;
 
-    font-size: clamp(24px, 4vw, 36px);
+    font-size: 36px;
     font-family: 'Sancreek';
     color: rgb(255,215,0);
 

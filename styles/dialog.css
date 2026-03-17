@@ -3,14 +3,16 @@
     justify-content: space-between;
     gap: 16px;
     margin-top: 32px;
-    width: 100%;
+    width: min(90vw, 720px);
     position: relative;
     z-index: 50;
 }
 
 .menu_button {
     height: 64px;
-    width: 224px;
+    flex: 1;
+    width: 100%;
+    max-width: 224px;
     background-image: url(/img/10_menu_elements/wood_background.jpg);
     background-size: cover;
     background-position: center;
@@ -49,8 +51,9 @@ dialog {
     box-shadow: none;
     font-size: 24px;
     overflow-y: auto;
-    width: 720px;
+    width: min(90vw, 720px);
     padding: 24px;
+    max-width: none;
 }
 
 .dialog_content {
@@ -177,5 +180,35 @@ p {
 }
 
 .imprint a:hover {
-    text-decoration: underline;
+    color: rgb(255,215,0);
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+}
+
+.reference_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.reference_list li {
+    margin-bottom: 12px;
+}
+
+.reference_list a {
+    text-decoration: none;
+    color: black;
+    letter-spacing: 1px; 
+}
+
+.reference_list a:hover {
+    color: rgb(255,215,0);
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
 }

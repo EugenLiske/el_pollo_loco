@@ -188,7 +188,6 @@ function startAudioOnce(event) {
 
 function toggleFullscreen() {
     let gameArea = document.getElementById('canvas_wrapper');
-    let changeScreenSizeButton = document.getElementById('change_screen_size_button');
 
     if (!document.fullscreenElement) {
         openFullscreen(gameArea);
