@@ -227,3 +227,27 @@ document.addEventListener("fullscreenchange", () => {
         button.src = "img/10_menu_elements/full_size.png";
     }
 });
+
+
+function checkDeviceOrientation() {
+    let turnDeviceWarning = document.getElementById('turn-device-warning');
+
+    let isMobileDevice = window.matchMedia("(pointer: coarse)").matches;
+    let isPortraitMode = window.innerHeight > window.innerWidth;
+
+    if (isMobileDevice) {
+        document.body.classList.add('mobile');
+    } else {
+        document.body.classList.remove('mobile');
+    }
+
+    if (isMobileDevice && isPortraitMode) {
+        turnDeviceWarning.classList.remove('hidden');
+    } else {
+        turnDeviceWarning.classList.add('hidden');
+    }
+}
+
+window.addEventListener('load', checkDeviceOrientation);
+window.addEventListener('resize', checkDeviceOrientation);
+window.addEventListener('orientationchange', checkDeviceOrientation);

@@ -5,6 +5,11 @@
     text-decoration: none;
 }
 
+html,
+body {
+    overflow: hidden;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -26,8 +31,8 @@ body {
 .canvas_wrapper {
     z-index: 0;
     position: relative;
-    width: min(90vw, 720px);  /* ✅ dynamisch */
-    aspect-ratio: 3 / 2;      /* ✅ Höhe wird automatisch passend berechnet */
+    width: min(90vw, 720px, 100vh * (3 / 2));
+    aspect-ratio: 3 / 2;
 }
 
 canvas {
@@ -155,4 +160,59 @@ canvas {
 
 .invisible {
     visibility: hidden;
+}
+
+.turn_device_warning {
+    z-index: 999;
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;   /* 🔥 NEU */
+    justify-content: center;
+    align-items: center;
+    gap: 48px;               /* 🔥 Abstand zwischen Icon & Text */
+
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 24px;
+    text-align: center;
+}
+
+.turn_device_warning p {
+    font-size: 56px;
+    font-family: 'Sancreek';
+    color: rgb(255,215,0);
+    text-shadow:
+        -2px -2px 0 black,
+         2px -2px 0 black,
+        -2px  2px 0 black,
+         2px  2px 0 black;
+}
+
+.turn_device_warning.hidden {
+    display: none;
+}
+
+.turn_device_icon {
+    height: 164px;
+    width: 164px;
+    object-fit: contain;
+    animation: rotateDevice 1.5s ease-in-out infinite;
+}
+
+@keyframes rotateDevice {
+    0%   { transform: rotate(0deg); }
+    50%  { transform: rotate(90deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.mobile .button_container {
+    display: none;
+}
+
+.mobile .ingame_buttons_wrapper {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) scale(0.75);
+    transform-origin: top center;
 }
