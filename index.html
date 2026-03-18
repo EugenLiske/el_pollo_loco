@@ -44,12 +44,27 @@
     <div id="canvas_wrapper" class="canvas_wrapper">
         <canvas id="canvas" width="720" height="480"></canvas>
 
-        <div class="ingame_buttons_wrapper">
+        <div class="ingame_menu_group">
+            <div class="ingame_buttons_wrapper">
+                <img onclick="goBackToMainMenu()" id="home_button" class="ingame_button is_disabled" src="img/10_menu_elements/home_button.png" alt="home_button">
+                <img onclick="restartGame()" id="replay_button" class="ingame_button is_disabled" src="img/10_menu_elements/replay_button.png" alt="replay_button">
+                <img onclick="toggleSounds()" id="sound_button" class="ingame_button" src="img/10_menu_elements/sound_button.png" alt="sound_button">
+                <img onclick="toggleFullscreen()" id="change_screen_size_button" class="ingame_button" src="img/10_menu_elements/full_size.png" alt="change_screen_size_button">
+            </div>
+
+            <div id="burger_menu" class="burger_menu">
+                <button class="burger_menu_entry" onclick="openDialog('gameInformation')">Spielinfo</button>
+                <button class="burger_menu_entry" onclick="openDialog('imprint')">Impressum</button>
+                <button class="burger_menu_entry" onclick="openDialog('references')">Referenzen</button>
+            </div>
+        </div>
+
+        <!-- <div class="ingame_buttons_wrapper">
             <img onclick="goBackToMainMenu()" id="home_button" class="ingame_button is_disabled" src="img/10_menu_elements/home_button.png" alt="home_button">
             <img onclick="restartGame()" id="replay_button" class="ingame_button is_disabled" src="img/10_menu_elements/replay_button.png" alt="replay_button">
             <img onclick="toggleSounds()" id="sound_button" class="ingame_button" src="img/10_menu_elements/sound_button.png" alt="sound_button">
             <img onclick="toggleFullscreen()" id="change_screen_size_button" class="ingame_button" src="img/10_menu_elements/full_size.png" alt="change_screen_size_button">
-        </div>
+        </div> -->
 
         <div id="startScreen" class="start_screen">
             <img src="./img/9_intro_outro_screens/start/startscreen_1.png" alt="Startscreen">

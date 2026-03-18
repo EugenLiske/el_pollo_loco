@@ -21,10 +21,15 @@ class SfxManager {
     static dialogButtonClick = new Audio('audio/sfx/dialog_button_click.mp3');
 
     static {
-        this.collectCoin.volume = 0.4;
-        this.walk.volume = 0.4;
-        this.hurt.volume = 0.5;
-        this.dead.volume = 0.5;
+        this.collectCoin.volume = 0.3;
+        this.walk.volume = 0.3;
+        this.hurt.volume = 0.3;
+        this.dead.volume = 0.3;
+        this.jump.volume = 0.3;
+        this.sleep.volume = 0.3;
+        this.throwBottle.volume = 0.3;
+        this.smallChickenDead.volume = 0.3;
+        this.chickenDead.volume = 0.3;
     }
 
     static async play(sound, startAt = 0) {

@@ -4,8 +4,28 @@
         font-size: 26px;
     }
 
-    
     .touch_button {
+        height: 56px;
+        width: 56px;
+    }
+
+    .burger_menu_entry {
+        font-size: 20px;
+    }
+
+    .burger_menu {
+        padding: 0px;
+    }
+
+    h1 {
+        font-size: 56px;
+    }
+
+    h2 {
+        font-size: 36px;
+    }
+
+    .close_button {
         height: 56px;
         width: 56px;
     }

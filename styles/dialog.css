@@ -8,6 +8,10 @@
     z-index: 50;
 }
 
+.mobile .button_container {
+    display: none;
+}
+
 .menu_button {
     height: 64px;
     flex: 1;

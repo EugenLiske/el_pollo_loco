@@ -192,15 +192,18 @@ function bindTouchButton(button, keyboardKey) {
             return;
         }
 
+        button.classList.add('active');
         keyboard[keyboardKey] = true;
     }, { passive: false });
 
     button.addEventListener('touchend', (event) => {
         event.preventDefault();
+        button.classList.remove('active');
         keyboard[keyboardKey] = false;
     });
 
     button.addEventListener('touchcancel', () => {
+        button.classList.remove('active');
         keyboard[keyboardKey] = false;
     });
 }
@@ -261,6 +264,9 @@ function closeFullscreen() {
 
 document.addEventListener("fullscreenchange", () => {
     const button = document.getElementById('change_screen_size_button');
+    let isMobileDevice = window.matchMedia("(pointer: coarse)").matches;
+
+    if (isMobileDevice) return;
 
     if (document.fullscreenElement) {
         button.src = "img/10_menu_elements/normal_size.png";
@@ -272,14 +278,21 @@ document.addEventListener("fullscreenchange", () => {
 
 function checkDeviceOrientation() {
     let turnDeviceWarning = document.getElementById('turn-device-warning');
+    let changeScreenButton = document.getElementById('change_screen_size_button');
 
     let isMobileDevice = window.matchMedia("(pointer: coarse)").matches;
     let isPortraitMode = window.innerHeight > window.innerWidth;
 
     if (isMobileDevice) {
         document.body.classList.add('mobile');
+        changeScreenButton.src = "img/10_menu_elements/burger_menu_icon.png";
+        changeScreenButton.onclick = toggleBurgerMenu;
+  
     } else {
         document.body.classList.remove('mobile');
+        changeScreenButton.src = "img/10_menu_elements/full_size.png";
+        changeScreenButton.onclick = toggleFullscreen;
+
     }
 
     if (isMobileDevice && isPortraitMode) {
@@ -292,3 +305,8 @@ function checkDeviceOrientation() {
 window.addEventListener('load', checkDeviceOrientation);
 window.addEventListener('resize', checkDeviceOrientation);
 window.addEventListener('orientationchange', checkDeviceOrientation);
+
+function toggleBurgerMenu() {
+    let burgerMenu = document.getElementById('burger_menu');
+    burgerMenu.classList.toggle('is_open');
+}

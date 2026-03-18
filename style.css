@@ -47,12 +47,15 @@ canvas {
     display: block;
 }
 
-.ingame_buttons_wrapper {
+.ingame_menu_group {
     z-index: 4;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     top: 3%;
+}
+
+.ingame_buttons_wrapper {
     display: flex;
     gap: 32px;
     border-radius: 10px;
@@ -62,6 +65,7 @@ canvas {
     pointer-events: none;
     transition: opacity 0.25s ease-in-out;
 }
+
 
 .ingame_button {
     height: 28px;
@@ -206,14 +210,11 @@ canvas {
     100% { transform: rotate(0deg); }
 }
 
-.mobile .button_container {
-    display: none;
-}
 
 .mobile .ingame_buttons_wrapper {
     opacity: 1;
     pointer-events: auto;
-    transform: translateX(-50%) scale(0.75);
+    transform: scale(0.75);
     transform-origin: top center;
 }
 
@@ -260,7 +261,7 @@ canvas {
     cursor: pointer;
 }
 
-.touch_button:active {
+.touch_button.active {
     transform: scale(0.9);
 }
 
@@ -268,4 +269,53 @@ canvas {
     width: 40px;
     height: 40px;
     object-fit: contain;
+}
+
+.burger_menu {
+    display: none;
+}
+
+.mobile .burger_menu {
+    z-index: 5;
+    position: absolute;
+    top: 0;
+    left: calc(100% - 24px);
+    display: flex;
+    flex-direction: column;
+    min-width: 100px;
+    padding: 8px;
+
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgb(0, 0, 0);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-16px);
+    transition:
+        opacity 0.25s ease-in-out,
+        transform 0.25s ease-in-out,
+        visibility 0.25s ease-in-out;
+}
+
+.mobile .burger_menu.is_open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
+}
+
+.burger_menu_entry {
+    all: unset;
+    padding: 2px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    font-family: 'Rancho';
+    color:black;
+    text-align: center;
+}
+
+.burger_menu_entry:active {
+    transform: scale(0.95);
 }
