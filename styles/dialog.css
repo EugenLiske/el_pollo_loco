@@ -13,11 +13,12 @@
     flex: 1;
     width: 100%;
     max-width: 224px;
-    background-image: url(/img/10_menu_elements/wood_background.jpg);
+    background-image: url("../img/10_menu_elements/wood_background.jpg");
     background-size: cover;
     background-position: center;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgb(0, 0, 0);
+    border: 3px solid rgb(102, 31, 0);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,7 +40,7 @@
 }
 
 dialog {
-    background-image: url(/img/10_menu_elements/wood_background.jpg);
+    background-image: url("../img/10_menu_elements/wood_background.jpg");
     border: 5px solid rgb(102, 31, 0);
     border-radius: 10px;
     position: fixed;

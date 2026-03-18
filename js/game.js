@@ -7,6 +7,7 @@ let audioStarted = false;
 
 function init(){
     canvas = document.getElementById('canvas');
+    initTouchControls();
 }
 
 
@@ -29,6 +30,7 @@ function stopGame(){
 
 
 function startGame(){
+    document.body.classList.add('game_started');
     AudioManager.playGame();
     let dialogButtonContainer = document.querySelector('.button_container');
     dialogButtonContainer.classList.add('invisible');
@@ -59,6 +61,7 @@ function toggleSounds(){
 
 
 function goBackToMainMenu(){
+    document.body.classList.remove('game_started');
     SfxManager.stop(SfxManager.sleep);
     stopGame();
     AudioManager.playMenu();
@@ -163,6 +166,44 @@ window.addEventListener("keyup", (event) => {
         keyboard.SPACE = false
     }
 });
+
+function initTouchControls() {
+    let touchLeftButton = document.getElementById('touch-left-button');
+    let touchRightButton = document.getElementById('touch-right-button');
+    let touchThrowButton = document.getElementById('touch-throw-button');
+    let touchJumpButton = document.getElementById('touch-jump-button');
+
+    bindTouchButton(touchLeftButton, 'LEFT');
+    bindTouchButton(touchRightButton, 'RIGHT');
+    bindTouchButton(touchJumpButton, 'UP');
+    bindTouchButton(touchThrowButton, 'SPACE');
+}
+
+function bindTouchButton(button, keyboardKey) {
+    if (!button) return;
+
+    button.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+
+        if (!world) return;
+        if (world.gameEnded) return;
+
+        if (keyboardKey === 'SPACE' && world.character.isDead()) {
+            return;
+        }
+
+        keyboard[keyboardKey] = true;
+    }, { passive: false });
+
+    button.addEventListener('touchend', (event) => {
+        event.preventDefault();
+        keyboard[keyboardKey] = false;
+    });
+
+    button.addEventListener('touchcancel', () => {
+        keyboard[keyboardKey] = false;
+    });
+}
 
 window.addEventListener("keydown", startAudioOnce);
 window.addEventListener("click", startAudioOnce);

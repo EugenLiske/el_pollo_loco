@@ -142,7 +142,7 @@ class Character extends MovableObject {
                 this.idleToSleepCounter = 0;
 
             } else if (this.isAboveGround()) {
-                this.setAnimation('jump', this.IMAGES_JUMPING);
+                this.setAnimation('jump', this.IMAGES_JUMPING, false);
                 this.idleToSleepCounter = 0;
 
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
