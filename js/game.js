@@ -8,7 +8,8 @@ let audioStarted = false;
 function init(){
     canvas = document.getElementById('canvas');
     initTouchControls();
-    loadMuteState(); 
+    loadMuteState();
+    disableContextMenuOnMobile(); 
 }
 
 
@@ -335,4 +336,16 @@ window.addEventListener('orientationchange', checkDeviceOrientation);
 function toggleBurgerMenu() {
     let burgerMenu = document.getElementById('burger_menu');
     burgerMenu.classList.toggle('is_open');
+}
+
+function disableContextMenuOnMobile() {
+    let isMobileDevice = window.matchMedia("(pointer: coarse)").matches;
+
+    if (isMobileDevice) {
+        document.addEventListener('contextmenu', preventContextMenu); // NEU
+    }
+}
+
+function preventContextMenu(event) {
+    event.preventDefault();
 }
