@@ -18,8 +18,6 @@ class SfxManager {
     static endbossHurt = new Audio('audio/sfx/endboss_hurt.mp3');
     static endbossAttacks = new Audio('audio/sfx/endboss_attacks.mp3');
 
-    static dialogButtonClick = new Audio('audio/sfx/dialog_button_click.mp3');
-
     static {
         this.collectCoin.volume = 0.3;
         this.walk.volume = 0.3;
@@ -80,6 +78,5 @@ class SfxManager {
         this.endbossDead.muted = AudioManager.isMuted;
         this.endbossHurt.muted = AudioManager.isMuted;
         this.endbossAttacks.muted = AudioManager.isMuted;
-        this.dialogButtonClick.muted = AudioManager.isMuted;
     }
 }

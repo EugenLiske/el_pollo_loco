@@ -8,6 +8,7 @@ let audioStarted = false;
 function init(){
     canvas = document.getElementById('canvas');
     initTouchControls();
+    loadMuteState(); 
 }
 
 
@@ -50,12 +51,37 @@ function startGame(){
 function toggleSounds(){
     AudioManager.toggleMute();
     SfxManager.syncMuteState();
+    localStorage.setItem('mute', AudioManager.isMuted);
+
     const soundButton = document.getElementById("sound_button");
 
     if (AudioManager.isMuted) {
         soundButton.src = "img/10_menu_elements/mute_button.png";
     } else {
         soundButton.src = "img/10_menu_elements/sound_button.png";
+    }
+}
+
+
+function loadMuteState(){
+    let savedMuteState = localStorage.getItem('mute');
+
+    if (savedMuteState === 'true') {
+        AudioManager.isMuted = true;
+    } else {
+        AudioManager.isMuted = false;
+    }
+
+    SfxManager.syncMuteState();
+
+    const soundButton = document.getElementById("sound_button");
+
+    if (soundButton) {
+        if (AudioManager.isMuted) {
+            soundButton.src = "img/10_menu_elements/mute_button.png";
+        } else {
+            soundButton.src = "img/10_menu_elements/sound_button.png";
+        }
     }
 }
 
