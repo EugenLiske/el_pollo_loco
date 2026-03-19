@@ -1,3 +1,6 @@
+/**
+ * Represents a collectible coin with animation and randomized placement.
+ */
 class Coin extends MovableObject {
   IMAGES_COIN = ["img/8_coin/coin_1.png", "img/8_coin/coin_2.png"];
 
@@ -6,6 +9,9 @@ class Coin extends MovableObject {
   width = 125;
   height = 125;
 
+  /**
+   * Creates a new coin, places it without overlapping others and starts animation.
+   */
   constructor() {
     super();
     this.loadImage("img/8_coin/coin_1.png");
@@ -24,6 +30,9 @@ class Coin extends MovableObject {
     this.animate();
   }
 
+  /**
+   * Places the coin randomly without overlapping existing coins.
+   */
   placeWithoutOverlap() {
     const maxTries = 100;
     let tries = 0;
@@ -42,6 +51,9 @@ class Coin extends MovableObject {
     }
   }
 
+  /**
+   * Starts the coin animation loop.
+   */
   animate() {
     startIntervalAndSaveID(() => this.playAnimation(this.IMAGES_COIN), 200);
   }

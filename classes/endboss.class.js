@@ -1,3 +1,6 @@
+/**
+ * Represents the endboss enemy with complex behavior, movement and attack logic.
+ */
 class Endboss extends MovableObject {
   IMAGES_IDLE = ["img/4_enemie_boss_chicken/1_walk/G1.png"];
 
@@ -63,6 +66,9 @@ class Endboss extends MovableObject {
   wasHurtSoundPlayed = false;
   wasAttackSoundPlayed = false;
 
+  /**
+   * Creates the endboss, loads all images and starts animation.
+   */
   constructor() {
     super();
     this.loadImage(this.IMAGES_IDLE[0]);
@@ -82,6 +88,9 @@ class Endboss extends MovableObject {
     this.animate();
   }
 
+  /**
+   * Updates movement direction depending on the character's position.
+   */
   updateMovementDirectionByCharacterPosition() {
     const character = this.world.character;
 
@@ -99,6 +108,9 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Handles damage when hit by the player.
+   */
   hitByPepe() {
     if (this.isAttacking) {
       return;
@@ -125,26 +137,34 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Starts movement and animation intervals.
+   */
   animate() {
     const WALK_DISTANCE = 1500;
     const ALERT_DISTANCE = 400;
     const ATTACK_DISTANCE = 600;
     const ANIMATION_INTERVAL_MS = 100;
+
     startIntervalAndSaveID(
       () => this.moveEndboss(WALK_DISTANCE, ALERT_DISTANCE, ATTACK_DISTANCE),
-      1000 / 60,
+      1000 / 60
     );
+
     startIntervalAndSaveID(
       () =>
         this.playEndbossAnimation(
           ALERT_DISTANCE,
           ATTACK_DISTANCE,
-          ANIMATION_INTERVAL_MS,
+          ANIMATION_INTERVAL_MS
         ),
-      ANIMATION_INTERVAL_MS,
+      ANIMATION_INTERVAL_MS
     );
   }
 
+  /**
+   * Controls movement logic of the endboss.
+   */
   moveEndboss(WALK_DISTANCE, ALERT_DISTANCE, ATTACK_DISTANCE) {
     if (!this.world || !this.world.character) {
       return;
@@ -175,6 +195,9 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Updates direction during movement or attack.
+   */
   updateMovementDirectionWhileMoving() {
     if (!this.isAttacking) {
       this.updateMovementDirectionByCharacterPosition();
@@ -183,10 +206,17 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Calculates the distance to the character.
+   * @returns {number}
+   */
   getDistanceToCharacter() {
     return Math.abs(this.x - this.world.character.x);
   }
 
+  /**
+   * Triggers walking behavior when the character is within range.
+   */
   checkIfEndbossStartsWalking(distance, WALK_DISTANCE) {
     if (!this.hasStartedWalking && distance <= WALK_DISTANCE) {
       this.hasStartedWalking = true;
@@ -194,6 +224,9 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Handles movement during attack.
+   */
   performAttackMovement(ATTACK_DISTANCE) {
     const traveled = Math.abs(this.x - this.attackStartX);
 
@@ -211,6 +244,9 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Resets state after finishing an attack.
+   */
   finishAttackMovement() {
     this.isAttacking = false;
     this.speed = this.normalSpeed;
@@ -220,6 +256,9 @@ class Endboss extends MovableObject {
     this.currentAnimation = "idle";
   }
 
+  /**
+   * Moves the endboss left or right.
+   */
   endbossWalks() {
     if (this.moveToRight) {
       this.moveRight();
@@ -228,30 +267,30 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Controls animation state based on current conditions.
+   */
   playEndbossAnimation(ALERT_DISTANCE, ATTACK_DISTANCE, ANIMATION_INTERVAL_MS) {
     if (!this.world || !this.world.character) {
       return;
     }
 
-    if (this.isDead()) {
-      this.playDeadAnimation();
-    } else if (this.isAttacking) {
-      this.playAttackAnimation();
-    } else {
+    if (this.isDead()) this.playDeadAnimation();
+    else if (this.isAttacking) this.playAttackAnimation();
+    else {
       this.updateMovementDirectionByCharacterPosition();
-
       const distance = this.getDistanceToCharacter();
 
-      if (this.isHurt()) {
-        this.playHurtAnimation();
-      } else if (this.endbossIsAlert(distance, ALERT_DISTANCE)) {
+      if (this.isHurt()) this.playHurtAnimation();
+      else if (this.endbossIsAlert(distance, ALERT_DISTANCE))
         this.playAlertAnimation(ATTACK_DISTANCE, ANIMATION_INTERVAL_MS);
-      } else {
-        this.playWalkingOrIdleAnimation();
-      }
+      else this.playWalkingOrIdleAnimation();
     }
   }
 
+  /**
+   * Plays the death animation and sound.
+   */
   playDeadAnimation() {
     if (!this.wasDeadSoundPlayed) {
       SfxManager.play(SfxManager.endbossDead);
@@ -263,6 +302,9 @@ class Endboss extends MovableObject {
     this.setAnimation("dead", this.IMAGES_DEAD, false);
   }
 
+  /**
+   * Plays the attack animation and sound.
+   */
   playAttackAnimation() {
     if (!this.wasAttackSoundPlayed) {
       SfxManager.play(SfxManager.endbossAttacks);
@@ -273,6 +315,9 @@ class Endboss extends MovableObject {
     this.setAnimation("attack", this.IMAGES_ATTACK, false);
   }
 
+  /**
+   * Plays the hurt animation and sound.
+   */
   playHurtAnimation() {
     if (!this.wasHurtSoundPlayed) {
       SfxManager.play(SfxManager.bottleBreaks);
@@ -287,10 +332,17 @@ class Endboss extends MovableObject {
     this.setAnimation("hurt", this.IMAGES_HURT, true);
   }
 
+  /**
+   * Checks if the endboss is in alert range.
+   * @returns {boolean}
+   */
   endbossIsAlert(distance, ALERT_DISTANCE) {
     return distance < ALERT_DISTANCE;
   }
 
+  /**
+   * Plays alert animation and triggers attack when finished.
+   */
   playAlertAnimation(ATTACK_DISTANCE, ANIMATION_INTERVAL_MS) {
     this.wasHurtSoundPlayed = false;
 
@@ -309,6 +361,9 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Starts the attack behavior.
+   */
   startAttack(ATTACK_DISTANCE, ANIMATION_INTERVAL_MS) {
     this.attackDirectionRight = this.moveToRight;
     this.otherDirection = this.attackDirectionRight;
@@ -326,6 +381,9 @@ class Endboss extends MovableObject {
     this.setAnimation("attack", this.IMAGES_ATTACK, false);
   }
 
+  /**
+   * Plays walking or idle animation.
+   */
   playWalkingOrIdleAnimation() {
     this.alertTriggered = false;
     this.wasHurtSoundPlayed = false;
@@ -338,12 +396,18 @@ class Endboss extends MovableObject {
     this.playWalkingAnimation();
   }
 
+  /**
+   * Plays idle animation.
+   */
   playIdleAnimation() {
     if (this.currentAnimation !== "idle") {
       this.setAnimation("idle", this.IMAGES_IDLE, false);
     }
   }
 
+  /**
+   * Plays walking animation.
+   */
   playWalkingAnimation() {
     this.setAnimation("walk", this.IMAGES_WALKING, true);
   }

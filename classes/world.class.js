@@ -1,3 +1,6 @@
+/**
+ * Represents the main game world, handling rendering, game logic and interactions.
+ */
 class World {
   character = new Character();
   level = level_1;
@@ -15,6 +18,12 @@ class World {
   throwableObjects = [];
   lastThrowTime = 0;
 
+  /**
+   * Creates the game world and initializes rendering and logic.
+   * 
+   * @param {HTMLCanvasElement} canvas - The canvas element.
+   * @param {Keyboard} keyboard - The keyboard input handler.
+   */
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -24,6 +33,9 @@ class World {
     this.runGameLogic();
   }
 
+  /**
+   * Links world reference to character and endboss.
+   */
   setWorld() {
     this.character.world = this;
     this.level.enemies.forEach((enemy) => {
@@ -33,6 +45,9 @@ class World {
     });
   }
 
+  /**
+   * Starts the main game loop for logic updates.
+   */
   runGameLogic() {
     startIntervalAndSaveID(() => {
       if (this.gameEnded) return;
@@ -43,11 +58,17 @@ class World {
     }, 1000 / 25);
   }
 
+  /**
+   * Stops rendering the canvas.
+   */
   stopDrawing() {
     this.isGameRunning = false;
     cancelAnimationFrame(this.animationFrameID);
   }
 
+  /**
+   * Checks all collision types in the game.
+   */
   checkCollisions() {
     this.checkCoinCollection();
     this.checkBottleCollection();
@@ -56,6 +77,9 @@ class World {
     this.checkBottleWithEnemyCollision();
   }
 
+  /**
+   * Checks if the player is dead and triggers lose state.
+   */
   checkIfPepeIsDead() {
     if (this.character.isDead()) {
       this.gameEnded = true;
@@ -67,6 +91,9 @@ class World {
     }
   }
 
+  /**
+   * Checks if the endboss is dead and triggers win state.
+   */
   checkIfEndbossIsDead() {
     for (let i = this.level.enemies.length - 1; i >= 0; i--) {
       const enemy = this.level.enemies[i];
@@ -83,6 +110,9 @@ class World {
     }
   }
 
+  /**
+   * Handles bottle throwing logic with cooldown.
+   */
   checkThrowObjects() {
     const COOLDOWN_MS = 500;
     const now = Date.now();
@@ -95,15 +125,24 @@ class World {
     }
   }
 
+  /**
+   * Checks if the character is allowed to throw a bottle.
+   * 
+   * @param {number} COOLDOWN_MS - Cooldown time in milliseconds.
+   * @param {number} now - Current timestamp.
+   * @returns {boolean}
+   */
   characterCanThrow(COOLDOWN_MS, now) {
     return (
       this.keyboard.SPACE &&
       this.character.currentAnimation !== "idleSleep" &&
-      // this.character.collectedBottles > 0 &&
       now - this.lastThrowTime >= COOLDOWN_MS
     );
   }
 
+  /**
+   * Creates and throws a new bottle.
+   */
   characterThrowsBottle() {
     this.character.idleToSleepCounter = 0;
     const directionLeft = this.character.otherDirection;
@@ -117,6 +156,9 @@ class World {
     this.character.collectedBottles--;
   }
 
+  /**
+   * Checks coin collection collisions.
+   */
   checkCoinCollection() {
     for (let i = this.level.coins.length - 1; i >= 0; i--) {
       const coin = this.level.coins[i];
@@ -124,10 +166,21 @@ class World {
     }
   }
 
+  /**
+   * Checks if character collides with a coin.
+   * 
+   * @param {MovableObject} coin
+   * @returns {boolean}
+   */
   characterIsCollectionCoin(coin) {
     return this.character.isCollidingWith(coin);
   }
 
+  /**
+   * Handles coin collection logic.
+   * 
+   * @param {number} i - Index of the coin.
+   */
   characterCollectsCoin(i) {
     this.character.collectCoin();
     SfxManager.play(SfxManager.collectCoin);
@@ -137,6 +190,9 @@ class World {
     this.level.coins.splice(i, 1);
   }
 
+  /**
+   * Checks bottle collection collisions.
+   */
   checkBottleCollection() {
     for (let i = this.level.bottles.length - 1; i >= 0; i--) {
       const bottle = this.level.bottles[i];
@@ -145,10 +201,21 @@ class World {
     }
   }
 
+  /**
+   * Checks if character collides with a bottle.
+   * 
+   * @param {MovableObject} bottle
+   * @returns {boolean}
+   */
   characterIsCollectingBottle(bottle) {
     return this.character.isCollidingWith(bottle);
   }
 
+  /**
+   * Handles bottle collection logic.
+   * 
+   * @param {number} i - Index of the bottle.
+   */
   characterCollectsBottle(i) {
     this.character.collectBottle();
     SfxManager.play(SfxManager.collectBottle);
@@ -158,6 +225,9 @@ class World {
     this.level.bottles.splice(i, 1);
   }
 
+  /**
+   * Checks collisions between character and enemies.
+   */
   checkEnemyCollision() {
     for (let i = this.level.enemies.length - 1; i >= 0; i--) {
       const enemy = this.level.enemies[i];
@@ -175,10 +245,16 @@ class World {
     }
   }
 
+  /**
+   * Checks if enemy is a regular one and stomped from above.
+   */
   isRegularEnemyAndJumpFromAbove(enemy) {
     return enemy instanceof Chicken && this.isCharacterStompingEnemy(enemy);
   }
 
+  /**
+   * Checks if character is stomping an enemy.
+   */
   isCharacterStompingEnemy(enemy) {
     const charBottom =
       this.character.y + this.character.height - this.character.offset.bottom;
@@ -188,6 +264,9 @@ class World {
     return isFalling && charBottom > enemyTop;
   }
 
+  /**
+   * Handles enemy death by jumping.
+   */
   regularEnemyDiesByJump(enemy) {
     enemy.die();
     if (enemy instanceof MiniChicken) {
@@ -207,16 +286,25 @@ class World {
     }, 500);
   }
 
+  /**
+   * Applies damage to character from endboss.
+   */
   characterHurtByEndboss() {
     this.character.hitByEndboss();
     this.statusBar.updateStatusBar(this.character.energy);
   }
 
+  /**
+   * Applies damage to character from regular enemy.
+   */
   characterHurtByRegularEnemy() {
     this.character.hitByEnemy();
     this.statusBar.updateStatusBar(this.character.energy);
   }
 
+  /**
+   * Checks if bottles hit the ground.
+   */
   checkBottleWithBottomCollision() {
     const GROUND_Y = 450;
 
@@ -229,10 +317,16 @@ class World {
     }
   }
 
+  /**
+   * Checks if a bottle has reached the ground.
+   */
   bottleFallsToGround(bottle, bottleBottom, GROUND_Y) {
     return !bottle.isBroken && bottleBottom >= GROUND_Y;
   }
 
+  /**
+   * Handles bottle breaking and splash animation.
+   */
   bottleBreaksAndSplashes(bottle) {
     SfxManager.play(SfxManager.bottleBreaks);
     bottle.isBroken = true;
@@ -248,6 +342,9 @@ class World {
     }, 500);
   }
 
+  /**
+   * Checks bottle collisions with enemies.
+   */
   checkBottleWithEnemyCollision() {
     for (let i = this.throwableObjects.length - 1; i >= 0; i--) {
       const bottle = this.throwableObjects[i];
@@ -269,11 +366,17 @@ class World {
     }
   }
 
+  /**
+   * Applies damage to the endboss.
+   */
   endbossIsDamagedByCharacter(enemy) {
     enemy.hitByPepe();
     this.statusBarEndbossHealth.updateStatusBar(enemy.energy);
   }
 
+  /**
+   * Handles enemy death caused by bottle.
+   */
   regularEnemyDiesByBottle(enemy) {
     enemy.die();
     if (enemy instanceof MiniChicken) {
@@ -292,6 +395,9 @@ class World {
     }, 500);
   }
 
+  /**
+   * Renders the game canvas and all objects.
+   */
   drawCanvas() {
     if (!this.isGameRunning) {
       return;
@@ -306,23 +412,29 @@ class World {
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.bottles);
     this.ctx.translate(-this.camera_x, 0);
-    //--------- space for fixed objects ---------
+
     this.addToMap(this.statusBar);
     this.addToMap(this.statusBarCoins);
     this.addToMap(this.statusBarBottles);
     this.addToMap(this.statusBarEndbossHealth);
-    //--------- space for fixed objects ---------
+
     this.ctx.translate(this.camera_x, 0);
     this.ctx.translate(-this.camera_x, 0);
     this.animationFrameID = requestAnimationFrame(() => this.drawCanvas());
   }
 
+  /**
+   * Adds multiple objects to the canvas.
+   */
   addObjectsToMap(objects) {
     objects.forEach((object) => {
       this.addToMap(object);
     });
   }
 
+  /**
+   * Draws a single object on the canvas with optional flipping.
+   */
   addToMap(movableObject) {
     if (movableObject.otherDirection) {
       this.flipImage(movableObject);
@@ -335,6 +447,9 @@ class World {
     }
   }
 
+  /**
+   * Flips an object horizontally.
+   */
   flipImage(movableObject) {
     this.ctx.save();
     this.ctx.translate(movableObject.width, 0);
@@ -342,6 +457,9 @@ class World {
     movableObject.x = movableObject.x * -1;
   }
 
+  /**
+   * Restores the original orientation after flipping.
+   */
   flipImageBack(movableObject) {
     movableObject.x = movableObject.x * -1;
     this.ctx.restore();

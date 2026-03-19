@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: levels/level_1.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: levels/level_1.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let level_1;
+
+/**
+ * Initializes level_1 with all enemies, background elements, collectibles and objects.
+ */
+function initLevel(){
+    level_1 = new Level(
+        [
+            new Chicken(),
+            new Chicken(),
+            new Chicken(),
+            new Chicken(),
+            new Chicken(),
+            new Chicken(),
+            new Chicken(),
+            new Chicken(),
+            new Chicken(),
+            new Chicken(),
+ 
+            new MiniChicken(),
+            new MiniChicken(),
+            new MiniChicken(),
+            new MiniChicken(),
+            new MiniChicken(),
+            new MiniChicken(),
+            new MiniChicken(),
+            new MiniChicken(),
+            new MiniChicken(),
+            new MiniChicken(),
+
+            new Endboss()
+        ],
+
+        [
+            new Cloud(-1000),
+            new Cloud(0),
+            new Cloud(1000),
+            new Cloud(2000),
+            new Cloud(3000),
+            new Cloud(4000),
+            new Cloud(5000),
+            new Cloud(6000),
+            new Cloud(7000),
+            new Cloud(8000),
+            new Cloud(9000),
+            new Cloud(10000),
+            new Cloud(11000)  
+        ],
+
+        [
+            new BackgroundObject('img/5_background/layers/air.png', -720),
+            new BackgroundObject('img/5_background/layers/3_third_layer/2.png', -720),
+            new BackgroundObject('img/5_background/layers/2_second_layer/2.png', -720),
+            new BackgroundObject('img/5_background/layers/1_first_layer/2.png', -720),
+
+            new BackgroundObject('img/5_background/layers/air.png', 0),
+            new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 0),
+            new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 0),
+            new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 0),
+
+            new BackgroundObject('img/5_background/layers/air.png', 720),
+            new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 720),
+            new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 720),
+            new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 720),
+
+            new BackgroundObject('img/5_background/layers/air.png', 720 * 2),
+            new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 720 * 2),
+            new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 720 * 2),
+            new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 720 * 2),
+
+            new BackgroundObject('img/5_background/layers/air.png', 720 * 3),
+            new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 720 * 3),
+            new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 720 * 3),
+            new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 720 * 3),
+
+            new BackgroundObject('img/5_background/layers/air.png', 720 * 4),
+            new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 720 * 4),
+            new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 720 * 4),
+            new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 720 * 4),
+
+            new BackgroundObject('img/5_background/layers/air.png', 720 * 5),
+            new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 720 * 5),
+            new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 720 * 5),
+            new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 720 * 5),
+
+            new BackgroundObject('img/5_background/layers/air.png', 720 * 6),
+            new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 720 * 6),
+            new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 720 * 6),
+            new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 720 * 6),
+
+            new BackgroundObject('img/5_background/layers/air.png', 720 * 7),
+            new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 720 * 7),
+            new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 720 * 7),
+            new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 720 * 7),
+
+            new BackgroundObject('img/5_background/layers/air.png', 720 * 8),
+            new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 720 * 8),
+            new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 720 * 8),
+            new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 720 * 8),
+
+            new BackgroundObject('img/5_background/layers/air.png', 720 * 9),
+            new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 720 * 9),
+            new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 720 * 9),
+            new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 720 * 9),
+        ],
+
+        [
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin(),
+            new Coin()
+        ],
+
+        [
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle(),
+            new SalsaBottle()
+        ]
+    );
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AudioManager.html">AudioManager</a></li><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MiniChicken.html">MiniChicken</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="SalsaBottle.html">SalsaBottle</a></li><li><a href="SfxManager.html">SfxManager</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindTouchButton">bindTouchButton</a></li><li><a href="global.html#bindTouchCancelEvent">bindTouchCancelEvent</a></li><li><a href="global.html#bindTouchEndEvent">bindTouchEndEvent</a></li><li><a href="global.html#bindTouchStartEvent">bindTouchStartEvent</a></li><li><a href="global.html#checkDeviceOrientation">checkDeviceOrientation</a></li><li><a href="global.html#cleanEndingScreen">cleanEndingScreen</a></li><li><a href="global.html#closeDialog">closeDialog</a></li><li><a href="global.html#closeDialogOnOutsideClick">closeDialogOnOutsideClick</a></li><li><a href="global.html#closeFullscreen">closeFullscreen</a></li><li><a href="global.html#disableContextMenuOnMobile">disableContextMenuOnMobile</a></li><li><a href="global.html#goBackToMainMenu">goBackToMainMenu</a></li><li><a href="global.html#handleMobileDeviceWarning">handleMobileDeviceWarning</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initLevel">initLevel</a></li><li><a href="global.html#initTouchControls">initTouchControls</a></li><li><a href="global.html#loadMuteState">loadMuteState</a></li><li><a href="global.html#openDialog">openDialog</a></li><li><a href="global.html#openFullscreen">openFullscreen</a></li><li><a href="global.html#prepareButtonsForGame">prepareButtonsForGame</a></li><li><a href="global.html#prepareButtonsForMenu">prepareButtonsForMenu</a></li><li><a href="global.html#preventContextMenu">preventContextMenu</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#setUpCorrectDeviceProperties">setUpCorrectDeviceProperties</a></li><li><a href="global.html#setUpCorrectSoundIcon">setUpCorrectSoundIcon</a></li><li><a href="global.html#startAudioOnce">startAudioOnce</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startIntervalAndSaveID">startIntervalAndSaveID</a></li><li><a href="global.html#stopGame">stopGame</a></li><li><a href="global.html#toggleBurgerMenu">toggleBurgerMenu</a></li><li><a href="global.html#toggleFullscreen">toggleFullscreen</a></li><li><a href="global.html#toggleSounds">toggleSounds</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Mar 19 2026 17:59:16 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

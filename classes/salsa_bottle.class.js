@@ -1,3 +1,6 @@
+/**
+ * Represents a collectible salsa bottle placed randomly in the level.
+ */
 class SalsaBottle extends MovableObject {
   IMAGES_SALSA_BOTTLE = [
     "img/6_salsa_bottle/1_salsa_bottle_on_ground.png",
@@ -9,6 +12,9 @@ class SalsaBottle extends MovableObject {
   height = 60;
   width = 60;
 
+  /**
+   * Creates a new salsa bottle with a random image and position.
+   */
   constructor() {
     super();
     const randomIndex = Math.floor(
@@ -29,6 +35,9 @@ class SalsaBottle extends MovableObject {
     SalsaBottle.existingBottles.push(this);
   }
 
+  /**
+   * Places the bottle randomly without overlapping existing bottles.
+   */
   placeWithoutOverlap() {
     const maxTries = 100;
     let tries = 0;

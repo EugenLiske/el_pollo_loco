@@ -1,3 +1,6 @@
+/**
+ * Represents the main player character with movement, animations and interactions.
+ */
 class Character extends MovableObject {
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
@@ -94,6 +97,9 @@ class Character extends MovableObject {
   wasDeadSoundPlayed = false;
   wasHurtSoundPlayed = false;
 
+  /**
+   * Creates a new character, loads all images and starts animation.
+   */
   constructor() {
     super();
     this.loadImage("img/2_character_pepe/2_walk/W-21.png");
@@ -115,11 +121,17 @@ class Character extends MovableObject {
     this.animate();
   }
 
+  /**
+   * Starts movement and animation intervals.
+   */
   animate() {
     startIntervalAndSaveID(() => this.moveCharacter(), 1000 / 60);
     startIntervalAndSaveID(() => this.playCharacterAnimation(), 100);
   }
 
+  /**
+   * Handles character movement based on input.
+   */
   moveCharacter() {
     if (this.isDead()) return;
     if (this.canMoveRight()) this.characterMovesRight();
@@ -128,28 +140,49 @@ class Character extends MovableObject {
     this.world.camera_x = -this.x + 150;
   }
 
+  /**
+   * Checks if the character can move right.
+   * @returns {boolean}
+   */
   canMoveRight() {
     return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
   }
 
+  /**
+   * Checks if the character can move left.
+   * @returns {boolean}
+   */
   canMoveLeft() {
     return this.world.keyboard.LEFT && this.x > 0;
   }
 
+  /**
+   * Checks if the character can jump.
+   * @returns {boolean}
+   */
   canJump() {
     return this.world.keyboard.UP && !this.isAboveGround();
   }
 
+  /**
+   * Moves the character to the right.
+   */
   characterMovesRight() {
     this.moveRight();
     this.otherDirection = false;
   }
 
+  /**
+   * Moves the character to the left.
+   */
   characterMovesLeft() {
     this.moveLeft();
     this.otherDirection = true;
   }
 
+  /**
+   * Makes the character jump and plays jump sound.
+   */
   characterJumps() {
     this.jump();
     SfxManager.play(SfxManager.jump);
@@ -157,6 +190,9 @@ class Character extends MovableObject {
     this.isWalkingSoundPlaying = false;
   }
 
+  /**
+   * Plays the correct animation depending on the current state.
+   */
   playCharacterAnimation() {
     if (this.isDead()) this.playDeadAnimation();
     else if (this.isHurt()) this.playHurtAnimation();
@@ -169,6 +205,9 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Plays the dead animation and sound.
+   */
   playDeadAnimation() {
     if (!this.wasDeadSoundPlayed) {
       SfxManager.play(SfxManager.dead);
@@ -179,6 +218,9 @@ class Character extends MovableObject {
     this.idleToSleepCounter = 0;
   }
 
+  /**
+   * Plays the hurt animation and sound.
+   */
   playHurtAnimation() {
     if (!this.wasHurtSoundPlayed) {
       SfxManager.play(SfxManager.hurt, 0.4);
@@ -192,15 +234,25 @@ class Character extends MovableObject {
     this.idleToSleepCounter = 0;
   }
 
+  /**
+   * Plays the jump animation.
+   */
   playJumpAnimation() {
     this.setAnimation("jump", this.IMAGES_JUMPING);
     this.idleToSleepCounter = 0;
   }
 
+  /**
+   * Checks if the character is walking.
+   * @returns {boolean}
+   */
   characterIsWalking() {
     return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
   }
 
+  /**
+   * Plays the walking animation and sound.
+   */
   playWalkingAnimation() {
     if (!this.isWalkingSoundPlaying) {
       SfxManager.playLoop(SfxManager.walk, 3.5);
@@ -213,10 +265,17 @@ class Character extends MovableObject {
     this.idleToSleepCounter = 0;
   }
 
+  /**
+   * Checks if the character is sleeping.
+   * @returns {boolean}
+   */
   characterIsSleeping() {
     return this.idleToSleepCounter >= 100;
   }
 
+  /**
+   * Plays the sleeping animation and sound.
+   */
   playSleepingAnimation() {
     if (!this.isSleepSoundPlaying) {
       SfxManager.playLoop(SfxManager.sleep);
@@ -226,6 +285,9 @@ class Character extends MovableObject {
     this.setAnimation("idleSleep", this.IMAGES_IDLE_LONG);
   }
 
+  /**
+   * Plays the idle animation.
+   */
   playIdleAnimation() {
     SfxManager.stop(SfxManager.sleep);
     this.isSleepSoundPlaying = false;
@@ -234,20 +296,32 @@ class Character extends MovableObject {
     this.idleToSleepCounter++;
   }
 
+  /**
+   * Resets sound states when switching to idle.
+   */
   resetSoundsForIdle() {
     this.wasHurtSoundPlayed = false;
     this.isWalkingSoundPlaying = false;
     SfxManager.stop(SfxManager.walk);
   }
 
+  /**
+   * Increases the collected coin count.
+   */
   collectCoin() {
     this.collectedCoins++;
   }
 
+  /**
+   * Increases the collected bottle count.
+   */
   collectBottle() {
     this.collectedBottles++;
   }
 
+  /**
+   * Handles damage from a normal enemy.
+   */
   hitByEnemy() {
     if (this.isDead()) {
       return;
@@ -263,6 +337,9 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Handles damage from the endboss.
+   */
   hitByEndboss() {
     if (this.isDead()) {
       return;

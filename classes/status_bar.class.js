@@ -1,3 +1,7 @@
+/**
+ * Represents a status bar (health, coins, bottles, or endboss health).
+ * Handles rendering and updating based on a percentage value.
+ */
 class StatusBar extends DrawableObject {
   IMAGES_HEALTH_BAR = [
     "img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png",
@@ -41,6 +45,13 @@ class StatusBar extends DrawableObject {
   endbossHealthPercentage = 100;
   type;
 
+  /**
+   * Creates a new status bar with a specific type and position.
+   * 
+   * @param {number} x - The horizontal position of the status bar.
+   * @param {number} y - The vertical position of the status bar.
+   * @param {string} type - The type of status bar ('health', 'coins', 'bottles', 'endbossHealth').
+   */
   constructor(x, y, type) {
     super();
     this.type = type;
@@ -53,6 +64,11 @@ class StatusBar extends DrawableObject {
     this.updateStatusBar(this.getCurrentValueByType());
   }
 
+  /**
+   * Updates the status bar based on a given value.
+   * 
+   * @param {number} value - The new percentage value.
+   */
   updateStatusBar(value) {
     this.setCurrentValueByType(value);
 
@@ -61,6 +77,11 @@ class StatusBar extends DrawableObject {
     this.img = this.imageCache[path];
   }
 
+  /**
+   * Returns the image array corresponding to the status bar type.
+   * 
+   * @returns {string[]}
+   */
   getImageArrayByType() {
     if (this.type === "health") {
       return this.IMAGES_HEALTH_BAR;
@@ -73,6 +94,11 @@ class StatusBar extends DrawableObject {
     }
   }
 
+  /**
+   * Returns the current value based on the status bar type.
+   * 
+   * @returns {number}
+   */
   getCurrentValueByType() {
     if (this.type === "health") {
       return this.percentage;
@@ -85,6 +111,11 @@ class StatusBar extends DrawableObject {
     }
   }
 
+  /**
+   * Sets the current value based on the status bar type.
+   * 
+   * @param {number} value - The value to set.
+   */
   setCurrentValueByType(value) {
     if (this.type === "health") {
       this.percentage = value;
@@ -97,6 +128,12 @@ class StatusBar extends DrawableObject {
     }
   }
 
+  /**
+   * Resolves the correct image index based on the percentage value.
+   * 
+   * @param {number} value - The percentage value.
+   * @returns {number}
+   */
   resolveImageIndex(value) {
     if (value === 100) return 5;
     else if (value >= 80) return 4;

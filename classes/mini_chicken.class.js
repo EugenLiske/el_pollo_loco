@@ -1,3 +1,6 @@
+/**
+ * Represents a smaller variant of the Chicken enemy.
+ */
 class MiniChicken extends Chicken {
   IMAGES_WALKING = [
     "img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
@@ -11,6 +14,9 @@ class MiniChicken extends Chicken {
   width = 50;
   height = 50;
 
+  /**
+   * Creates a new mini chicken with its own images and collision offset.
+   */
   constructor() {
     super();
 

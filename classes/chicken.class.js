@@ -1,3 +1,6 @@
+/**
+ * Represents a basic enemy chicken with movement and death behavior.
+ */
 class Chicken extends MovableObject {
   static existingEnemies = [];
 
@@ -14,6 +17,9 @@ class Chicken extends MovableObject {
   height = 75;
   isDeadChicken = false;
 
+  /**
+   * Creates a new chicken, positions it with distance to others and starts animation.
+   */
   constructor() {
     super();
 
@@ -36,6 +42,9 @@ class Chicken extends MovableObject {
     this.animate();
   }
 
+  /**
+   * Places the chicken on the x-axis while maintaining a minimum distance to other enemies.
+   */
   placeWithMinDistanceX() {
     const maxTries = 100;
     const MIN_DISTANCE_X = 250;
@@ -53,23 +62,35 @@ class Chicken extends MovableObject {
     }
   }
 
+  /**
+   * Marks the chicken as dead and plays the death animation.
+   */
   die() {
     this.isDeadChicken = true;
     this.speed = 0;
     this.setAnimation("dead", this.IMAGES_DEAD, false);
   }
 
+  /**
+   * Starts movement and animation intervals.
+   */
   animate() {
     startIntervalAndSaveID(() => this.moveChicken(), 1000 / 60);
     startIntervalAndSaveID(() => this.playChickenAnimation(), 200);
   }
 
+  /**
+   * Moves the chicken to the left if it is alive.
+   */
   moveChicken() {
     if (!this.isDeadChicken) {
       this.moveLeft();
     }
   }
 
+  /**
+   * Plays the walking animation if the chicken is alive.
+   */
   playChickenAnimation() {
     if (!this.isDeadChicken) {
       this.playAnimation(this.IMAGES_WALKING);

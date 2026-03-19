@@ -9,6 +9,9 @@ let audioStarted = false;
    INIT
 ======================= */
 
+/**
+ * Initializes the game, sets up canvas, controls and audio state.
+ */
 function init(){
     canvas = document.getElementById('canvas');
     initTouchControls();
@@ -21,11 +24,20 @@ function init(){
    INTERVAL MANAGEMENT
 ======================= */
 
+/**
+ * Starts an interval and stores its ID for later cleanup.
+ * 
+ * @param {Function} fn - The function to execute.
+ * @param {number} time - Interval time in milliseconds.
+ */
 function startIntervalAndSaveID(fn, time){
     let intervalID = setInterval(fn, time);
     intervalIDs.push(intervalID);
 }
 
+/**
+ * Stops all intervals and rendering.
+ */
 function stopGame(){
     intervalIDs.forEach(singleInterval => {
         clearInterval(singleInterval)
@@ -42,6 +54,9 @@ function stopGame(){
    GAME LIFECYCLE
 ======================= */
 
+/**
+ * Starts the game and initializes world and UI.
+ */
 function startGame(){
     document.body.classList.add('game_started');
     AudioManager.playGame();
@@ -51,6 +66,9 @@ function startGame(){
     document.getElementById('startScreen').classList.add('hidden');
 }
 
+/**
+ * Returns to the main menu and resets the game state.
+ */
 function goBackToMainMenu(){
     document.body.classList.remove('game_started');
     SfxManager.stop(SfxManager.sleep);
@@ -61,6 +79,9 @@ function goBackToMainMenu(){
     document.getElementById('startScreen').classList.remove('hidden');
 }
 
+/**
+ * Restarts the game from scratch.
+ */
 function restartGame(){
     stopGame();
     AudioManager.playGame();
@@ -69,6 +90,9 @@ function restartGame(){
     world = new World(canvas, keyboard);
 }
 
+/**
+ * Hides win and lose screens.
+ */
 function cleanEndingScreen(){
     let losingScreen = document.querySelector('.losing_screen');
     losingScreen.classList.add('hidden');
@@ -77,6 +101,9 @@ function cleanEndingScreen(){
     winningScreen.classList.add('hidden');
 }
 
+/**
+ * Prepares UI buttons for gameplay.
+ */
 function prepareButtonsForGame(){
     let dialogButtonContainer = document.querySelector('.button_container');
     dialogButtonContainer.classList.add('invisible');
@@ -87,6 +114,9 @@ function prepareButtonsForGame(){
     });
 }
 
+/**
+ * Prepares UI buttons for the main menu.
+ */
 function prepareButtonsForMenu(){
     let dialogButtonContainer = document.querySelector('.button_container');
     dialogButtonContainer.classList.remove('invisible');
@@ -101,6 +131,9 @@ function prepareButtonsForMenu(){
    AUDIO
 ======================= */
 
+/**
+ * Toggles global sound and updates UI icon.
+ */
 function toggleSounds(){
     AudioManager.toggleMute();
     SfxManager.syncMuteState();
@@ -111,6 +144,9 @@ function toggleSounds(){
     setUpCorrectSoundIcon(soundButton);
 }
 
+/**
+ * Loads mute state from localStorage and applies it.
+ */
 function loadMuteState(){
     let savedMuteState = localStorage.getItem('mute');
     if (savedMuteState === 'true') {
@@ -125,6 +161,11 @@ function loadMuteState(){
     }
 }
 
+/**
+ * Updates the sound button icon based on mute state.
+ * 
+ * @param {HTMLImageElement} soundButton
+ */
 function setUpCorrectSoundIcon(soundButton){
     if (AudioManager.isMuted) {
         soundButton.src = "img/10_menu_elements/mute_button.png";
@@ -133,6 +174,11 @@ function setUpCorrectSoundIcon(soundButton){
     }
 }
 
+/**
+ * Starts audio once after first user interaction.
+ * 
+ * @param {Event} event
+ */
 function startAudioOnce(event) {
     if (audioStarted) return;
 
@@ -156,16 +202,31 @@ function startAudioOnce(event) {
    DIALOGS
 ======================= */
 
+/**
+ * Opens a dialog by ID.
+ * 
+ * @param {string} menuReference
+ */
 function openDialog(menuReference){
     let dialogRef = document.getElementById(menuReference);
     dialogRef.showModal();
 }
 
+/**
+ * Closes a dialog by ID.
+ * 
+ * @param {string} menuReference
+ */
 function closeDialog(menuReference){
     let dialogRef = document.getElementById(menuReference);
     dialogRef.close();
 }
 
+/**
+ * Closes dialog when clicking outside.
+ * 
+ * @param {MouseEvent} event
+ */
 function closeDialogOnOutsideClick(event) {
     const dialog = event.currentTarget;
     const rect = dialog.getBoundingClientRect();
@@ -186,6 +247,9 @@ function closeDialogOnOutsideClick(event) {
    KEYBOARD INPUT
 ======================= */
 
+/**
+ * Handles keydown events for character control.
+ */
 window.addEventListener("keydown", (event) => {
     const key = event.key.toLowerCase();
 
@@ -212,6 +276,9 @@ window.addEventListener("keydown", (event) => {
     }
 });
 
+/**
+ * Handles keyup events for character control.
+ */
 window.addEventListener("keyup", (event) => {
     const key = event.key.toLowerCase();
 
@@ -237,6 +304,9 @@ window.addEventListener("keyup", (event) => {
    TOUCH INPUT
 ======================= */
 
+/**
+ * Initializes touch controls for mobile devices.
+ */
 function initTouchControls() {
     let touchLeftButton = document.getElementById('touch-left-button');
     let touchRightButton = document.getElementById('touch-right-button');
@@ -249,6 +319,9 @@ function initTouchControls() {
     bindTouchButton(touchThrowButton, 'SPACE');
 }
 
+/**
+ * Binds touch events to a button.
+ */
 function bindTouchButton(button, keyboardKey) {
     if (!button) return;
     bindTouchStartEvent(button, keyboardKey);
@@ -256,6 +329,9 @@ function bindTouchButton(button, keyboardKey) {
     bindTouchCancelEvent(button, keyboardKey)
 }
 
+/**
+ * Handles touchstart event.
+ */
 function bindTouchStartEvent(button, keyboardKey){
     button.addEventListener('touchstart', (event) => {
         event.preventDefault();
@@ -270,6 +346,9 @@ function bindTouchStartEvent(button, keyboardKey){
     }, { passive: false });
 }
 
+/**
+ * Handles touchend event.
+ */
 function bindTouchEndEvent(button, keyboardKey){
     button.addEventListener('touchend', (event) => {
         event.preventDefault();
@@ -278,6 +357,9 @@ function bindTouchEndEvent(button, keyboardKey){
     });
 }
 
+/**
+ * Handles touchcancel event.
+ */
 function bindTouchCancelEvent(button, keyboardKey){
     button.addEventListener('touchcancel', () => {
         button.classList.remove('active');
@@ -290,6 +372,9 @@ function bindTouchCancelEvent(button, keyboardKey){
    FULLSCREEN
 ======================= */
 
+/**
+ * Toggles fullscreen mode.
+ */
 function toggleFullscreen() {
     let gameArea = document.getElementById('canvas_wrapper');
 
@@ -300,6 +385,11 @@ function toggleFullscreen() {
     }
 }
 
+/**
+ * Opens fullscreen mode.
+ * 
+ * @param {HTMLElement} element
+ */
 function openFullscreen(element) {
   if (element.requestFullscreen) {
     element.requestFullscreen();
@@ -310,6 +400,9 @@ function openFullscreen(element) {
   }
 }
 
+/**
+ * Closes fullscreen mode.
+ */
 function closeFullscreen() {
   if (document.exitFullscreen) {
     document.exitFullscreen();
@@ -320,6 +413,9 @@ function closeFullscreen() {
   }
 }
 
+/**
+ * Updates fullscreen button icon based on state.
+ */
 document.addEventListener("fullscreenchange", () => {
     const button = document.getElementById('change_screen_size_button');
     let isMobileDevice = window.matchMedia("(pointer: coarse)").matches;
@@ -338,6 +434,9 @@ document.addEventListener("fullscreenchange", () => {
    MOBILE / UI
 ======================= */
 
+/**
+ * Checks device orientation and updates UI accordingly.
+ */
 function checkDeviceOrientation() {
     let turnDeviceWarning = document.getElementById('turn-device-warning');
     let changeScreenButton = document.getElementById('change_screen_size_button');
@@ -349,6 +448,9 @@ function checkDeviceOrientation() {
     handleMobileDeviceWarning(isMobileDevice, isPortraitMode, turnDeviceWarning);
 }
 
+/**
+ * Adjusts UI based on device type.
+ */
 function setUpCorrectDeviceProperties(isMobileDevice, changeScreenButton){
     if (isMobileDevice) {
         document.body.classList.add('mobile');
@@ -362,6 +464,9 @@ function setUpCorrectDeviceProperties(isMobileDevice, changeScreenButton){
     }
 }
 
+/**
+ * Shows or hides orientation warning on mobile devices.
+ */
 function handleMobileDeviceWarning(isMobileDevice, isPortraitMode, turnDeviceWarning){
     if (isMobileDevice && isPortraitMode) {
         turnDeviceWarning.classList.remove('hidden');
@@ -370,11 +475,17 @@ function handleMobileDeviceWarning(isMobileDevice, isPortraitMode, turnDeviceWar
     }
 }
 
+/**
+ * Toggles the burger menu visibility.
+ */
 function toggleBurgerMenu() {
     let burgerMenu = document.getElementById('burger_menu');
     burgerMenu.classList.toggle('is_open');
 }
 
+/**
+ * Disables context menu on mobile devices.
+ */
 function disableContextMenuOnMobile() {
     let isMobileDevice = window.matchMedia("(pointer: coarse)").matches;
 
@@ -383,6 +494,11 @@ function disableContextMenuOnMobile() {
     }
 }
 
+/**
+ * Prevents default context menu.
+ * 
+ * @param {Event} event
+ */
 function preventContextMenu(event) {
     event.preventDefault();
 }

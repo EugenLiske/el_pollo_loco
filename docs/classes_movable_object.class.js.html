@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: classes/movable_object.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: classes/movable_object.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Base class for all movable objects in the game.
+ * Handles movement, physics, collisions and animations.
+ */
+class MovableObject extends DrawableObject {
+  speed = 0.15;
+  otherDirection = false;
+  speedY = 0;
+  acceleration = 1;
+  energy = 100;
+  lastHit = 0;
+  currentAnimation = null;
+
+  offset = {
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  };
+
+  /**
+   * Applies gravity to the object by updating vertical position over time.
+   */
+  applyGravity() {
+    startIntervalAndSaveID(() => {
+      if (this.isAboveGround() || this.speedY > 0) {
+        this.y -= this.speedY;
+        this.speedY -= this.acceleration;
+      }
+    }, 1000 / 25);
+  }
+
+  /**
+   * Checks if the object is above ground level.
+   * @returns {boolean}
+   */
+  isAboveGround() {
+    if (this instanceof ThrowableObject) {
+      return true;
+    } else {
+      return this.y &lt; 180;
+    }
+  }
+
+  /**
+   * Checks collision using full bounding boxes.
+   * 
+   * @param {MovableObject} movableObject - The object to check collision with.
+   * @returns {boolean}
+   */
+  isColliding(movableObject) {
+    return (
+      this.x + this.width > movableObject.x &amp;&amp;
+      this.y + this.height > movableObject.y &amp;&amp;
+      this.x &lt; movableObject.x + movableObject.width &amp;&amp;
+      this.y &lt; movableObject.y + movableObject.height
+    );
+  }
+
+  /**
+   * Checks collision using offset-based hitboxes.
+   * 
+   * @param {MovableObject} movableObject - The object to check collision with.
+   * @returns {boolean}
+   */
+  isCollidingWith(movableObject) {
+    return (
+      this.x + this.width - this.offset.right >
+        movableObject.x + movableObject.offset.left &amp;&amp;
+      this.y + this.height - this.offset.bottom >
+        movableObject.y + movableObject.offset.top &amp;&amp;
+      this.x + this.offset.left &lt;
+        movableObject.x + movableObject.width - movableObject.offset.right &amp;&amp;
+      this.y + this.offset.top &lt;
+        movableObject.y + movableObject.height - movableObject.offset.bottom
+    );
+  }
+
+  /**
+   * Checks if the object is currently in a hurt state.
+   * @returns {boolean}
+   */
+  isHurt() {
+    let timePassed = new Date().getTime() - this.lastHit;
+    timePassed = timePassed / 1000;
+    return timePassed &lt; 1;
+  }
+
+  /**
+   * Checks if the object is dead.
+   * @returns {boolean}
+   */
+  isDead() {
+    return this.energy === 0;
+  }
+
+  /**
+   * Sets a new animation if it differs from the current one.
+   * 
+   * @param {string} animationKey - Identifier for the animation.
+   * @param {string[]} images - Array of image paths.
+   * @param {boolean} [loop=true] - Whether the animation should loop.
+   */
+  setAnimation(animationKey, images, loop = true) {
+    if (this.currentAnimation !== animationKey) {
+      this.currentAnimation = animationKey;
+      this.currentImageIndex = 0;
+    }
+
+    this.playAnimation(images, loop);
+  }
+
+  /**
+   * Plays an animation by cycling through image frames.
+   * 
+   * @param {string[]} images - Array of image paths.
+   * @param {boolean} [loop=true] - Whether the animation should loop.
+   */
+  playAnimation(images, loop = true) {
+    let index = this.currentImageIndex;
+
+    if (loop) {
+      index = index % images.length;
+      this.currentImageIndex++;
+    } else {
+      if (this.currentImageIndex &lt; images.length - 1) {
+        this.currentImageIndex++;
+      }
+    }
+
+    const path = images[index];
+    this.img = this.imageCache[path];
+  }
+
+  /**
+   * Moves the object to the right.
+   */
+  moveRight() {
+    this.x += this.speed;
+  }
+
+  /**
+   * Moves the object to the left.
+   */
+  moveLeft() {
+    this.x -= this.speed;
+  }
+
+  /**
+   * Applies an upward force to simulate a jump.
+   */
+  jump() {
+    this.speedY = 23;
+  }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AudioManager.html">AudioManager</a></li><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MiniChicken.html">MiniChicken</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="SalsaBottle.html">SalsaBottle</a></li><li><a href="SfxManager.html">SfxManager</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindTouchButton">bindTouchButton</a></li><li><a href="global.html#bindTouchCancelEvent">bindTouchCancelEvent</a></li><li><a href="global.html#bindTouchEndEvent">bindTouchEndEvent</a></li><li><a href="global.html#bindTouchStartEvent">bindTouchStartEvent</a></li><li><a href="global.html#checkDeviceOrientation">checkDeviceOrientation</a></li><li><a href="global.html#cleanEndingScreen">cleanEndingScreen</a></li><li><a href="global.html#closeDialog">closeDialog</a></li><li><a href="global.html#closeDialogOnOutsideClick">closeDialogOnOutsideClick</a></li><li><a href="global.html#closeFullscreen">closeFullscreen</a></li><li><a href="global.html#disableContextMenuOnMobile">disableContextMenuOnMobile</a></li><li><a href="global.html#goBackToMainMenu">goBackToMainMenu</a></li><li><a href="global.html#handleMobileDeviceWarning">handleMobileDeviceWarning</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initLevel">initLevel</a></li><li><a href="global.html#initTouchControls">initTouchControls</a></li><li><a href="global.html#loadMuteState">loadMuteState</a></li><li><a href="global.html#openDialog">openDialog</a></li><li><a href="global.html#openFullscreen">openFullscreen</a></li><li><a href="global.html#prepareButtonsForGame">prepareButtonsForGame</a></li><li><a href="global.html#prepareButtonsForMenu">prepareButtonsForMenu</a></li><li><a href="global.html#preventContextMenu">preventContextMenu</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#setUpCorrectDeviceProperties">setUpCorrectDeviceProperties</a></li><li><a href="global.html#setUpCorrectSoundIcon">setUpCorrectSoundIcon</a></li><li><a href="global.html#startAudioOnce">startAudioOnce</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startIntervalAndSaveID">startIntervalAndSaveID</a></li><li><a href="global.html#stopGame">stopGame</a></li><li><a href="global.html#toggleBurgerMenu">toggleBurgerMenu</a></li><li><a href="global.html#toggleFullscreen">toggleFullscreen</a></li><li><a href="global.html#toggleSounds">toggleSounds</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Mar 19 2026 17:59:16 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

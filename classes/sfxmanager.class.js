@@ -1,3 +1,6 @@
+/**
+ * Manages all sound effects in the game, including playback, looping and mute synchronization.
+ */
 class SfxManager {
   static walk = new Audio("audio/sfx/pepe_walk.mp3");
   static jump = new Audio("audio/sfx/pepe_jump.mp3");
@@ -30,6 +33,13 @@ class SfxManager {
     this.chickenDead.volume = 0.3;
   }
 
+  /**
+   * Plays a sound effect once from a given start time.
+   * 
+   * @param {HTMLAudioElement} sound - The sound to play.
+   * @param {number} [startAt=0] - The time (in seconds) to start playback from.
+   * @returns {Promise<void>}
+   */
   static async play(sound, startAt = 0) {
     sound.pause();
     sound.currentTime = startAt;
@@ -43,6 +53,13 @@ class SfxManager {
     }
   }
 
+  /**
+   * Plays a sound effect in a loop with an optional playback rate.
+   * 
+   * @param {HTMLAudioElement} sound - The sound to loop.
+   * @param {number} [rate=1] - Playback speed multiplier.
+   * @returns {Promise<void>}
+   */
   static async playLoop(sound, rate = 1) {
     sound.loop = true;
     sound.playbackRate = rate;
@@ -56,12 +73,20 @@ class SfxManager {
     }
   }
 
+  /**
+   * Stops a sound effect and resets its playback state.
+   * 
+   * @param {HTMLAudioElement} sound - The sound to stop.
+   */
   static stop(sound) {
     sound.pause();
     sound.currentTime = 0;
     sound.loop = false;
   }
 
+  /**
+   * Synchronizes the mute state of all sound effects with the AudioManager.
+   */
   static syncMuteState() {
     this.walk.muted = AudioManager.isMuted;
     this.jump.muted = AudioManager.isMuted;
