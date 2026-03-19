@@ -136,6 +136,7 @@ class World {
     return (
       this.keyboard.SPACE &&
       this.character.currentAnimation !== "idleSleep" &&
+      this.character.collectedBottles > 0 &&
       now - this.lastThrowTime >= COOLDOWN_MS
     );
   }
