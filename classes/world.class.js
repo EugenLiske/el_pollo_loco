@@ -440,8 +440,8 @@ class World {
       this.flipImage(movableObject);
     }
     movableObject.drawSingleObject(this.ctx);
-    movableObject.drawFrame(this.ctx);
-    movableObject.drawFrameWithOffset(this.ctx);
+    // movableObject.drawFrame(this.ctx);
+    // movableObject.drawFrameWithOffset(this.ctx);
     if (movableObject.otherDirection) {
       this.flipImageBack(movableObject);
     }
