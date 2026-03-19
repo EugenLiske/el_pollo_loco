@@ -1,50 +1,52 @@
 class SalsaBottle extends MovableObject {
-    IMAGES_SALSA_BOTTLE = [
-        'img/6_salsa_bottle/1_salsa_bottle_on_ground.png',
-        'img/6_salsa_bottle/2_salsa_bottle_on_ground.png'
-    ];
+  IMAGES_SALSA_BOTTLE = [
+    "img/6_salsa_bottle/1_salsa_bottle_on_ground.png",
+    "img/6_salsa_bottle/2_salsa_bottle_on_ground.png",
+  ];
 
-    static existingBottles = [];
+  static existingBottles = [];
 
-    height = 60;
-    width = 60;
+  height = 60;
+  width = 60;
 
-    constructor(){
-        super();
-        const randomIndex = Math.floor(Math.random() * this.IMAGES_SALSA_BOTTLE.length);
-        const randomPath = this.IMAGES_SALSA_BOTTLE[randomIndex];
+  constructor() {
+    super();
+    const randomIndex = Math.floor(
+      Math.random() * this.IMAGES_SALSA_BOTTLE.length,
+    );
+    const randomPath = this.IMAGES_SALSA_BOTTLE[randomIndex];
 
-        this.loadImage(randomPath);
+    this.loadImage(randomPath);
 
-        this.offset = {
-            top: 8,
-            left: 13,
-            right: 13,
-            bottom: 5
-        };
+    this.offset = {
+      top: 8,
+      left: 13,
+      right: 13,
+      bottom: 5,
+    };
 
-        this.placeWithoutOverlap();
-        SalsaBottle.existingBottles.push(this);
-    }
+    this.placeWithoutOverlap();
+    SalsaBottle.existingBottles.push(this);
+  }
 
-    placeWithoutOverlap(){
-        const maxTries = 100;
-        let tries = 0;
-        let positionOk = false;
+  placeWithoutOverlap() {
+    const maxTries = 100;
+    let tries = 0;
+    let positionOk = false;
 
-        while (!positionOk && tries < maxTries) {
-            this.x = 300 + Math.random() * 4500;
-            this.y = 360 + Math.random() * 10;
+    while (!positionOk && tries < maxTries) {
+      this.x = 300 + Math.random() * 4500;
+      this.y = 360 + Math.random() * 10;
 
-            positionOk = true;
+      positionOk = true;
 
-            SalsaBottle.existingBottles.forEach(existingBottle => {
-                if (this.isCollidingWithOffset(existingBottle)) {
-                    positionOk = false;
-                }
-            });
-
-            tries++;
+      SalsaBottle.existingBottles.forEach((existingBottle) => {
+        if (this.isCollidingWith(existingBottle)) {
+          positionOk = false;
         }
+      });
+
+      tries++;
     }
+  }
 }

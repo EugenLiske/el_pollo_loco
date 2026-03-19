@@ -65,24 +65,20 @@ dialog {
     display: block;
 }
 
-/* Scrollbar Breite */
 dialog::-webkit-scrollbar {
     width: 10px;
 }
 
-/* Hintergrund der Leiste */
 dialog::-webkit-scrollbar-track {
     background: rgba(0,0,0,0.2);
     border-radius: 10px;
 }
 
-/* Der bewegliche Slider */
 dialog::-webkit-scrollbar-thumb {
-    background: rgb(102, 31, 0); /* dein brauner Farbton */
+    background: rgb(102, 31, 0);
     border-radius: 10px;
 }
 
-/* Hover Effekt */
 dialog::-webkit-scrollbar-thumb:hover {
     background: rgb(140, 50, 10);
 }
