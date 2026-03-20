@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: BackgroundObject</title>
+    <title>JSDoc: Source: js/audio_controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,213 +17,82 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: BackgroundObject</h1>
+    <h1 class="page-title">Source: js/audio_controller.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>BackgroundObject<span class="signature">(imagePath, x)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description">Represents a background object in the game world.Background objects are positioned side by side to build the scenery.</div>
-        
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Toggles global sound and updates UI icon.
+ */
+function toggleSounds(){
+    AudioManager.toggleMute();
+    SfxManager.syncMuteState();
+
+    localStorage.setItem('mute', AudioManager.isMuted);
+
+    const soundButton = document.getElementById("sound_button");
+    setUpCorrectSoundIcon(soundButton);
+}
+
+/**
+ * Loads mute state from localStorage and applies it.
+ */
+function loadMuteState(){
+    let savedMuteState = localStorage.getItem('mute');
+    if (savedMuteState === 'true') {
+        AudioManager.isMuted = true;
+    } else {
+        AudioManager.isMuted = false;
+    }
+    SfxManager.syncMuteState();
+    const soundButton = document.getElementById("sound_button");
+    if (soundButton) {
+        setUpCorrectSoundIcon(soundButton);
+    }
+}
+
+/**
+ * Updates the sound button icon based on mute state.
+ * 
+ * @param {HTMLImageElement} soundButton
+ */
+function setUpCorrectSoundIcon(soundButton){
+    if (AudioManager.isMuted) {
+        soundButton.src = "img/10_menu_elements/mute_button.png";
+    } else {
+        soundButton.src = "img/10_menu_elements/sound_button.png";
+    }
+}
+
+/**
+ * Starts audio once after first user interaction.
+ * 
+ * @param {Event} event
+ */
+function startAudioOnce(event) {
+    if (audioStarted) return;
+
+    const clickedStartButton = event?.target?.id === "startGameButton";
+    const clickedSoundButton = event?.target?.id === "sound_button";
+
+    if (clickedSoundButton) return;
+
+    audioStarted = true;
     
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="BackgroundObject"><span class="type-signature"></span>new BackgroundObject<span class="signature">(imagePath, x)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Creates a new background object with the given image and x position.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>imagePath</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The path to the background image.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>x</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The horizontal position of the background object.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_background_object.class.js.html">classes/background_object.class.js</a>, <a href="classes_background_object.class.js.html#line5">line 5</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    if (!clickedStartButton) {
+        AudioManager.playMenu();
+    }
+
+    window.removeEventListener("keydown", startAudioOnce);
+    window.removeEventListener("click", startAudioOnce);
+}</code></pre>
+        </article>
+    </section>
 
 
 

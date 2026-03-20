@@ -49,9 +49,7 @@ class Endboss extends MovableObject {
   height = 240;
   x = 6000;
   y = 200;
-
   speed = 1.2;
-
   world;
   alertTriggered = false;
   hasStartedWalking = false;
@@ -61,7 +59,6 @@ class Endboss extends MovableObject {
   attackDirectionRight = false;
   attackSpeed = 0;
   normalSpeed = 0;
-
   wasDeadSoundPlayed = false;
   wasHurtSoundPlayed = false;
   wasAttackSoundPlayed = false;
@@ -77,14 +74,12 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
-
     this.offset = {
       top: 50,
       left: 15,
       right: 15,
       bottom: 10,
     };
-
     this.animate();
   }
 
@@ -93,10 +88,8 @@ class Endboss extends MovableObject {
    */
   updateMovementDirectionByCharacterPosition() {
     const character = this.world.character;
-
     const pepeLeftWithOffset = character.x + character.offset.left;
     const bossRightWithOffset = this.x + this.width - this.offset.right;
-
     const pepeIsBehindBoss = pepeLeftWithOffset > bossRightWithOffset;
 
     if (pepeIsBehindBoss) {
@@ -125,11 +118,9 @@ class Endboss extends MovableObject {
     if (this.energy <= 0) {
       this.energy = 0;
       this.currentImageIndex = 0;
-
       this.isAttacking = false;
       this.speed = 0;
       this.alertTriggered = false;
-
       this.currentAnimation = "idle";
       this.setAnimation("dead", this.IMAGES_DEAD, false);
     } else {
@@ -145,7 +136,6 @@ class Endboss extends MovableObject {
     const ALERT_DISTANCE = 400;
     const ATTACK_DISTANCE = 600;
     const ANIMATION_INTERVAL_MS = 100;
-
     startIntervalAndSaveID(
       () => this.moveEndboss(WALK_DISTANCE, ALERT_DISTANCE, ATTACK_DISTANCE),
       1000 / 60
@@ -296,7 +286,6 @@ class Endboss extends MovableObject {
       SfxManager.play(SfxManager.endbossDead);
       this.wasDeadSoundPlayed = true;
     }
-
     this.isAttacking = false;
     this.alertTriggered = false;
     this.setAnimation("dead", this.IMAGES_DEAD, false);
@@ -310,7 +299,6 @@ class Endboss extends MovableObject {
       SfxManager.play(SfxManager.endbossAttacks);
       this.wasAttackSoundPlayed = true;
     }
-
     this.otherDirection = this.attackDirectionRight;
     this.setAnimation("attack", this.IMAGES_ATTACK, false);
   }
@@ -327,7 +315,6 @@ class Endboss extends MovableObject {
       }, 1000);
       this.wasHurtSoundPlayed = true;
     }
-
     this.alertTriggered = false;
     this.setAnimation("hurt", this.IMAGES_HURT, true);
   }
@@ -345,13 +332,11 @@ class Endboss extends MovableObject {
    */
   playAlertAnimation(ATTACK_DISTANCE, ANIMATION_INTERVAL_MS) {
     this.wasHurtSoundPlayed = false;
-
     if (!this.alertTriggered) {
       this.alertTriggered = true;
       this.setAnimation("alert", this.IMAGES_ALERT, false);
       return;
     }
-
     if (this.currentAnimation === "alert") {
       this.setAnimation("alert", this.IMAGES_ALERT, false);
 
@@ -367,16 +352,12 @@ class Endboss extends MovableObject {
   startAttack(ATTACK_DISTANCE, ANIMATION_INTERVAL_MS) {
     this.attackDirectionRight = this.moveToRight;
     this.otherDirection = this.attackDirectionRight;
-
     this.normalSpeed = this.speed;
-
     const durationSeconds =
       (this.IMAGES_ATTACK.length * ANIMATION_INTERVAL_MS) / 1000;
     this.attackSpeed = ATTACK_DISTANCE / (durationSeconds * 60);
-
     this.attackStartX = this.x;
     this.isAttacking = true;
-
     this.currentAnimation = "idle";
     this.setAnimation("attack", this.IMAGES_ATTACK, false);
   }
@@ -387,12 +368,10 @@ class Endboss extends MovableObject {
   playWalkingOrIdleAnimation() {
     this.alertTriggered = false;
     this.wasHurtSoundPlayed = false;
-
     if (!this.hasStartedWalking) {
       this.playIdleAnimation();
       return;
     }
-
     this.playWalkingAnimation();
   }
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: BackgroundObject</title>
+    <title>JSDoc: Source: classes/world.bottle_collision.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,213 +17,109 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: BackgroundObject</h1>
+    <h1 class="page-title">Source: classes/world.bottle_collision.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>BackgroundObject<span class="signature">(imagePath, x)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description">Represents a background object in the game world.Background objects are positioned side by side to build the scenery.</div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="BackgroundObject"><span class="type-signature"></span>new BackgroundObject<span class="signature">(imagePath, x)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Creates a new background object with the given image and x position.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>imagePath</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The path to the background image.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>x</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The horizontal position of the background object.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_background_object.class.js.html">classes/background_object.class.js</a>, <a href="classes_background_object.class.js.html#line5">line 5</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Checks if bottles hit the ground.
+ */
+World.prototype.checkBottleWithBottomCollision = function () {
+  const GROUND_Y = 450;
+
+  for (let i = this.throwableObjects.length - 1; i >= 0; i--) {
+    const bottle = this.throwableObjects[i];
+    const bottleBottom = bottle.y + bottle.height - bottle.offset.bottom;
+
+    if (this.bottleFallsToGround(bottle, bottleBottom, GROUND_Y))
+      this.bottleBreaksAndSplashes(bottle);
+  }
+};
+
+/**
+ * Checks if a bottle has reached the ground.
+ */
+World.prototype.bottleFallsToGround = function (bottle, bottleBottom, GROUND_Y) {
+  return !bottle.isBroken &amp;&amp; bottleBottom >= GROUND_Y;
+};
+
+/**
+ * Handles bottle breaking and splash animation.
+ */
+World.prototype.bottleBreaksAndSplashes = function (bottle) {
+  SfxManager.play(SfxManager.bottleBreaks);
+  bottle.isBroken = true;
+  bottle.speedY = 0;
+  bottle.acceleration = 0;
+  bottle.setAnimation("splash", bottle.IMAGES_BOTTLE_SPLASH, false);
+
+  setTimeout(() => {
+    const index = this.throwableObjects.indexOf(bottle);
+    if (index > -1) {
+      this.throwableObjects.splice(index, 1);
+    }
+  }, 500);
+};
+
+/**
+ * Checks bottle collisions with enemies.
+ */
+World.prototype.checkBottleWithEnemyCollision = function () {
+  for (let i = this.throwableObjects.length - 1; i >= 0; i--) {
+    const bottle = this.throwableObjects[i];
+    if (bottle.isBroken) {
+      continue;
+    }
+    for (let i = this.level.enemies.length - 1; i >= 0; i--) {
+      const enemy = this.level.enemies[i];
+      if (enemy instanceof Chicken &amp;&amp; enemy.isDeadChicken) {
+        continue;
+      }
+      if (bottle.isCollidingWith(enemy)) {
+        this.bottleBreaksAndSplashes(bottle);
+        if (enemy instanceof Endboss) this.endbossIsDamagedByCharacter(enemy);
+        if (enemy instanceof Chicken) this.regularEnemyDiesByBottle(enemy);
+        break;
+      }
+    }
+  }
+};
+
+/**
+ * Applies damage to the endboss.
+ */
+World.prototype.endbossIsDamagedByCharacter = function (enemy) {
+  enemy.hitByPepe();
+  this.statusBarEndbossHealth.updateStatusBar(enemy.energy);
+};
+
+/**
+ * Handles enemy death caused by bottle.
+ */
+World.prototype.regularEnemyDiesByBottle = function (enemy) {
+  enemy.die();
+  if (enemy instanceof MiniChicken) {
+    SfxManager.play(SfxManager.smallChickenDead, 0.1);
+    setTimeout(() => {
+      SfxManager.stop(SfxManager.smallChickenDead);
+    }, 750);
+  } else if (enemy instanceof Chicken) {
+    SfxManager.play(SfxManager.chickenDead, 0.1);
+  }
+  setTimeout(() => {
+    const index = this.level.enemies.indexOf(enemy);
+    if (index > -1) {
+      this.level.enemies.splice(index, 1);
+    }
+  }, 500);
+};</code></pre>
+        </article>
+    </section>
 
 
 

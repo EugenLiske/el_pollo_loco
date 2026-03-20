@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: BackgroundObject</title>
+    <title>JSDoc: Source: js/mobile_settings_controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,213 +17,85 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: BackgroundObject</h1>
+    <h1 class="page-title">Source: js/mobile_settings_controller.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>BackgroundObject<span class="signature">(imagePath, x)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description">Represents a background object in the game world.Background objects are positioned side by side to build the scenery.</div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="BackgroundObject"><span class="type-signature"></span>new BackgroundObject<span class="signature">(imagePath, x)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Creates a new background object with the given image and x position.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>imagePath</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The path to the background image.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>x</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The horizontal position of the background object.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_background_object.class.js.html">classes/background_object.class.js</a>, <a href="classes_background_object.class.js.html#line5">line 5</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Checks device orientation and updates UI accordingly.
+ */
+function checkDeviceOrientation() {
+    let turnDeviceWarning = document.getElementById('turn-device-warning');
+    let changeScreenButton = document.getElementById('change_screen_size_button');
+
+    let isMobileDevice = window.matchMedia("(pointer: coarse)").matches;
+    let isPortraitMode = window.innerHeight > window.innerWidth;
+
+    setUpCorrectDeviceProperties(isMobileDevice, changeScreenButton);
+    handleMobileDeviceWarning(isMobileDevice, isPortraitMode, turnDeviceWarning);
+}
+
+/**
+ * Adjusts UI based on device type.
+ */
+function setUpCorrectDeviceProperties(isMobileDevice, changeScreenButton){
+    if (isMobileDevice) {
+        document.body.classList.add('mobile');
+        changeScreenButton.src = "img/10_menu_elements/burger_menu_icon.png";
+        changeScreenButton.onclick = toggleBurgerMenu;
+  
+    } else {
+        document.body.classList.remove('mobile');
+        changeScreenButton.src = "img/10_menu_elements/full_size.png";
+        changeScreenButton.onclick = toggleFullscreen;
+    }
+}
+
+/**
+ * Shows or hides orientation warning on mobile devices.
+ */
+function handleMobileDeviceWarning(isMobileDevice, isPortraitMode, turnDeviceWarning){
+    if (isMobileDevice &amp;&amp; isPortraitMode) {
+        turnDeviceWarning.classList.remove('hidden');
+    } else {
+        turnDeviceWarning.classList.add('hidden');
+    }
+}
+
+/**
+ * Toggles the burger menu visibility.
+ */
+function toggleBurgerMenu() {
+    let burgerMenu = document.getElementById('burger_menu');
+    burgerMenu.classList.toggle('is_open');
+}
+
+/**
+ * Disables context menu on mobile devices.
+ */
+function disableContextMenuOnMobile() {
+    let isMobileDevice = window.matchMedia("(pointer: coarse)").matches;
+
+    if (isMobileDevice) {
+        document.addEventListener('contextmenu', preventContextMenu);
+    }
+}
+
+/**
+ * Prevents default context menu.
+ * 
+ * @param {Event} event
+ */
+function preventContextMenu(event) {
+    event.preventDefault();
+}</code></pre>
+        </article>
+    </section>
 
 
 

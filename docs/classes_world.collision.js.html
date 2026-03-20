@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: classes/world.collision.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: classes/world.collision.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Checks all collision types in the game.
+ */
+World.prototype.checkCollisions = function () {
+  this.checkCoinCollection();
+  this.checkBottleCollection();
+  this.checkEnemyCollision();
+  this.checkBottleWithBottomCollision();
+  this.checkBottleWithEnemyCollision();
+};
+
+/**
+ * Checks coin collection collisions.
+ */
+World.prototype.checkCoinCollection = function () {
+  for (let i = this.level.coins.length - 1; i >= 0; i--) {
+    const coin = this.level.coins[i];
+    if (this.characterIsCollectionCoin(coin)) this.characterCollectsCoin(i);
+  }
+};
+
+/**
+ * Checks if character collides with a coin.
+ * 
+ * @param {MovableObject} coin
+ * @returns {boolean}
+ */
+World.prototype.characterIsCollectionCoin = function (coin) {
+  return this.character.isCollidingWith(coin);
+};
+
+/**
+ * Handles coin collection logic.
+ * 
+ * @param {number} i - Index of the coin.
+ */
+World.prototype.characterCollectsCoin = function (i) {
+  this.character.collectCoin();
+  SfxManager.play(SfxManager.collectCoin);
+  let percent =
+    (this.character.collectedCoins / this.character.maxCoins) * 100;
+  this.statusBarCoins.updateStatusBar(percent);
+  this.level.coins.splice(i, 1);
+};
+
+/**
+ * Checks bottle collection collisions.
+ */
+World.prototype.checkBottleCollection = function () {
+  for (let i = this.level.bottles.length - 1; i >= 0; i--) {
+    const bottle = this.level.bottles[i];
+    if (this.characterIsCollectingBottle(bottle))
+      this.characterCollectsBottle(i);
+  }
+};
+
+/**
+ * Checks if character collides with a bottle.
+ * 
+ * @param {MovableObject} bottle
+ * @returns {boolean}
+ */
+World.prototype.characterIsCollectingBottle = function (bottle) {
+  return this.character.isCollidingWith(bottle);
+};
+
+/**
+ * Handles bottle collection logic.
+ * 
+ * @param {number} i - Index of the bottle.
+ */
+World.prototype.characterCollectsBottle = function (i) {
+  this.character.collectBottle();
+  SfxManager.play(SfxManager.collectBottle);
+  let percent =
+    (this.character.collectedBottles / this.character.maxBottles) * 100;
+  this.statusBarBottles.updateStatusBar(percent);
+  this.level.bottles.splice(i, 1);
+};
+
+/**
+ * Checks collisions between character and enemies.
+ */
+World.prototype.checkEnemyCollision = function () {
+  for (let i = this.level.enemies.length - 1; i >= 0; i--) {
+    const enemy = this.level.enemies[i];
+
+    if (enemy instanceof Chicken &amp;&amp; enemy.isDeadChicken) {
+      continue;
+    }
+
+    if (this.character.isCollidingWith(enemy)) {
+      if (this.isRegularEnemyAndJumpFromAbove(enemy))
+        this.regularEnemyDiesByJump(enemy);
+      else if (enemy instanceof Endboss) this.characterHurtByEndboss();
+      else this.characterHurtByRegularEnemy();
+    }
+  }
+};
+
+/**
+ * Checks if enemy is a regular one and stomped from above.
+ */
+World.prototype.isRegularEnemyAndJumpFromAbove = function (enemy) {
+  return enemy instanceof Chicken &amp;&amp; this.isCharacterStompingEnemy(enemy);
+};
+
+/**
+ * Checks if character is stomping an enemy.
+ */
+World.prototype.isCharacterStompingEnemy = function (enemy) {
+  const charBottom =
+    this.character.y + this.character.height - this.character.offset.bottom;
+  const enemyTop = enemy.y + enemy.offset.top;
+  const isFalling =
+    this.character.speedY &lt; 0 &amp;&amp; this.character.isAboveGround();
+  return isFalling &amp;&amp; charBottom > enemyTop;
+};
+
+/**
+ * Handles enemy death by jumping.
+ */
+World.prototype.regularEnemyDiesByJump = function (enemy) {
+  enemy.die();
+  if (enemy instanceof MiniChicken) {
+    SfxManager.play(SfxManager.smallChickenDead, 0.1);
+    setTimeout(() => {
+      SfxManager.stop(SfxManager.smallChickenDead);
+    }, 750);
+  } else if (enemy instanceof Chicken) {
+    SfxManager.play(SfxManager.chickenDead, 0.1);
+  }
+  this.character.speedY = 1;
+  setTimeout(() => {
+    const index = this.level.enemies.indexOf(enemy);
+    if (index > -1) {
+      this.level.enemies.splice(index, 1);
+    }
+  }, 500);
+};
+
+/**
+ * Applies damage to character from endboss.
+ */
+World.prototype.characterHurtByEndboss = function () {
+  this.character.hitByEndboss();
+  this.statusBar.updateStatusBar(this.character.energy);
+};
+
+/**
+ * Applies damage to character from regular enemy.
+ */
+World.prototype.characterHurtByRegularEnemy = function () {
+  this.character.hitByEnemy();
+  this.statusBar.updateStatusBar(this.character.energy);
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AudioManager.html">AudioManager</a></li><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MiniChicken.html">MiniChicken</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="SalsaBottle.html">SalsaBottle</a></li><li><a href="SfxManager.html">SfxManager</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindTouchButton">bindTouchButton</a></li><li><a href="global.html#bindTouchCancelEvent">bindTouchCancelEvent</a></li><li><a href="global.html#bindTouchEndEvent">bindTouchEndEvent</a></li><li><a href="global.html#bindTouchStartEvent">bindTouchStartEvent</a></li><li><a href="global.html#checkDeviceOrientation">checkDeviceOrientation</a></li><li><a href="global.html#cleanEndingScreen">cleanEndingScreen</a></li><li><a href="global.html#closeDialog">closeDialog</a></li><li><a href="global.html#closeDialogOnOutsideClick">closeDialogOnOutsideClick</a></li><li><a href="global.html#closeFullscreen">closeFullscreen</a></li><li><a href="global.html#disableContextMenuOnMobile">disableContextMenuOnMobile</a></li><li><a href="global.html#goBackToMainMenu">goBackToMainMenu</a></li><li><a href="global.html#handleMobileDeviceWarning">handleMobileDeviceWarning</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initLevel">initLevel</a></li><li><a href="global.html#initTouchControls">initTouchControls</a></li><li><a href="global.html#loadMuteState">loadMuteState</a></li><li><a href="global.html#openDialog">openDialog</a></li><li><a href="global.html#openFullscreen">openFullscreen</a></li><li><a href="global.html#prepareButtonsForGame">prepareButtonsForGame</a></li><li><a href="global.html#prepareButtonsForMenu">prepareButtonsForMenu</a></li><li><a href="global.html#preventContextMenu">preventContextMenu</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#setUpCorrectDeviceProperties">setUpCorrectDeviceProperties</a></li><li><a href="global.html#setUpCorrectSoundIcon">setUpCorrectSoundIcon</a></li><li><a href="global.html#startAudioOnce">startAudioOnce</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startIntervalAndSaveID">startIntervalAndSaveID</a></li><li><a href="global.html#stopGame">stopGame</a></li><li><a href="global.html#toggleBurgerMenu">toggleBurgerMenu</a></li><li><a href="global.html#toggleFullscreen">toggleFullscreen</a></li><li><a href="global.html#toggleSounds">toggleSounds</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Fri Mar 20 2026 11:52:55 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
