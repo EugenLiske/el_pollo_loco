@@ -17,7 +17,7 @@ function init(){
     initTouchControls();
     loadMuteState();
     disableContextMenuOnMobile(); 
-}
+} 
 
 
 /* =======================
